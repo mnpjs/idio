@@ -25,8 +25,10 @@ const config = {
       },
     },
   },
-  async afterInit({ org, name }, { loading, github }) {
+  async afterInit({ org, name, spawn }, { loading, github }) {
     await loading('Enabling Pages on docs', github.pages.enable(org, name))
+    await spawn('git', ['rm', '--cached', '.env', '.settings'])
+    await spawn('git', ['commit', '-am', 'ignore settings'])
   },
 }
 
