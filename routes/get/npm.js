@@ -8,7 +8,7 @@ export default async (ctx) => {
   const { user } = ctx.request.query
   const { statusCode, body, headers: { location } } = await aqt(`https://www.npmjs.com/~${user}`, {
     headers: {
-      'User-Agent': 'Idio Template {{ url }}',
+      'User-Agent': 'Idio Template {{ frontend }}',
     },
   })
   if (statusCode == 302 && location.startsWith('/org'))

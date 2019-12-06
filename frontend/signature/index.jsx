@@ -33,7 +33,7 @@ class App extends Auth {
 }
 
 window['comments'] = ({
-  'host': host = 'https://{{ url }}', 'container': container = 'preact',
+  'host': host = 'https://{{ hostname }}', 'container': container = 'preact',
 }) => {
   render(<App host={host}/>, document.getElementById(container))
 }

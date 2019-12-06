@@ -36,7 +36,7 @@
   "bugs": {
     "url": "{{ repo.html_url }}/issues"
   },
-  "homepage": "{{ url }}",
+  "homepage": "{{ frontend }}",
   "dependencies": {
     "@artdeco/clean-stack": "^1.1.1",
     "@depack/form": "^1.4.0",

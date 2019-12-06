@@ -17,11 +17,17 @@ const config = {
         return name
       },
       alias: 'https://mnpjs.github.io/idio/',
+      afterQuestions(_, hostname) {
+        return {
+          hostname,
+          url: hostname,
+        }
+      },
     },
     frontend: {
-      text: 'Frontend hostname.',
+      text: 'Frontend',
       getDefault ({ name }) {
-        return `www.${name}`
+        return name
       },
     },
   },
