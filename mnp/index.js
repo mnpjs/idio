@@ -31,10 +31,10 @@ const config = {
       },
     },
   },
-  async afterInit({ org, name }, { spawn, loading, github }) {
+  async afterInit({ org, name }, { git, loading, github }) {
     await loading('Enabling Pages on docs', github.pages.enable(org, name))
-    await spawn('git', ['rm', '--cached', '.env', '.settings'])
-    await spawn('git', ['commit', '-am', 'ignore settings'])
+    await git(['rm', '--cached', '.env', '.settings'])
+    await git(['commit', '-am', 'ignore settings'])
   },
 }
 
