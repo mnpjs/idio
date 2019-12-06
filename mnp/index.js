@@ -9,7 +9,7 @@ const config = {
   },
   questions: {
     title: {
-      text: 'Webiste Title',
+      text: 'Website Title',
     },
     hostname: {
       text: 'Hostname',
