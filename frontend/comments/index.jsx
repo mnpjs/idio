@@ -1,7 +1,5 @@
-/* eslint-env browser */
 import { render } from 'preact'
 import CommentForm from './Form'
-// import { test } from '/update.js'
 import Auth from '../Auth'
 import AppUser from '../Auth/AppUser'
 import List from './List'
@@ -32,20 +30,8 @@ class App extends Auth {
   }
 }
 
-{/* <button onClick={() => {
-  const src = `/update.js?ts=${new Date().getTime()}`
-  const script = document.createElement('script')
-  script.type = 'module'
-  script.src = src
-  document.body.appendChild(script)
-}}>Update</button>
-<button onClick={() => {
-  // test()
-  debugger
-}}>Test</button> */}
-
 window['comments'] = ({
-  'host': host = 'https://api.technation.sucks', 'container': container = 'preact',
+  'host': host = 'https://api.{{ name }}', 'container': container = 'preact',
 }) => {
   render(<App host={host}/>, document.getElementById(container))
 }

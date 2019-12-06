@@ -22,10 +22,9 @@ const counter = async (ctx) => {
             {
               bool: {
                 should: [
-                  // first version
-                  { match: { path:  'reflex.png' } },
                   // second version
-                  { match: { path:  'reflex.jpg' } },
+                  // update this for exact pages
+                  { match: { path: 'reflex.jpg' } },
                 ],
               },
             },
@@ -33,12 +32,10 @@ const counter = async (ctx) => {
               bool: {
                 should: [
                   { match: { status:  200 } },
-                  // 7 Jan Bug
-                  { match: { status:  404 } },
                 ],
               },
             },
-            { match: { 'headers.referer':  'www.technation.sucks' } },
+            { match: { 'headers.referer':  '{{ name }}' } },
           ],
           must_not: [
             { match: { 'headers.from':  'googlebot' } },
@@ -67,7 +64,7 @@ const makeWindow = (count) => {
       x: 0,
       y: 10,
     },
-    content: `$ ${count} people now know`,
+    content: `$ ${count} people`,
   })
   const line2 = makeElement('text', {
     attributes: {
@@ -76,7 +73,7 @@ const makeWindow = (count) => {
       x: 0,
       y: 25,
     },
-    content: 'that Tech Nation sucks',
+    content: 'have visited us',
   })
 
   const res = Window({
@@ -87,6 +84,7 @@ const makeWindow = (count) => {
     content: [line, line2],
     noShadow: true,
   })
+  return res
 }
 
 export default counter
