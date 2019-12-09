@@ -23,7 +23,7 @@
     "externs": "typal types/externs.js",
     "build": "yarn-s d b doc",
     "e": "node example",
-    "u": "yarn-up -e preact",
+    "up": "yarn-up -e preact",
     "example/": "yarn e example/example.js"
   },
   "repository": {
@@ -53,7 +53,7 @@
     "catchment": "3.3.0",
     "erte": "1.2.0",
     "koa-router": "^7.4.0",
-    "logarithm": "^1.0.1",
+    "logarithm": "^2.0.0",
     "mongodb": "^3.3.5",
     "nicer": "^1.0.0",
     "svg-captcha": "^1.4.0",

@@ -20,11 +20,6 @@
   resolved "https://registry.yarnpkg.com/@artdeco/clean-stack/-/clean-stack-1.0.0.tgz#36ff9c9f66e6cb1eb0bfa90341be21cba70c7ea6"
   integrity sha512-lNrvCAG7xU8z2srq7XSbyDECGEjhXiXlP3CbQ4G0OSTckUBnu7yY7zUcpDK5x1CxyWvDKb3qsUkKKgK703GBeA==
 
-"@artdeco/clean-stack@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@artdeco/clean-stack/-/clean-stack-1.0.1.tgz#7e4d3bb1b0ac62173b00e4bba7091f7847cdb088"
-  integrity sha512-ZSavD8NpWA1/1SRCKrx8LZ5WfbKS1kRUIFOERJvR1jXqCAcbM3xWSP2VdCKEh4lCwWghSWQkotbpK6n+o1Y/xQ==
-
 "@artdeco/clean-stack@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@artdeco/clean-stack/-/clean-stack-1.1.1.tgz#0a68b9a061b5076ebaf948c150ea26d09c1e753f"
@@ -136,14 +131,6 @@
   dependencies:
     catchment "3.1.1"
     erotic "2.0.1"
-
-"@rqt/aqt@1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@rqt/aqt/-/aqt-1.2.3.tgz#e0ab9b60ae2dacac56dc6b34da26a0ee0cf71f09"
-  integrity sha512-fogSANLJ2YKsX7XWFgf5rXhVzOGluUx6fLnGueee1sCe34GHG/mpgsJuUrPgEsXEYtbsms3cgpiYEeo02Pa5CQ==
-  dependencies:
-    catchment "3.2.2"
-    erotic "2.0.2"
 
 "@svag/lib@2.0.0":
   version "2.0.0"
@@ -268,14 +255,6 @@ catchment@3.1.1:
     "@artdeco/clean-stack" "1.0.0"
     erotic "2.0.1"
 
-catchment@3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/catchment/-/catchment-3.2.2.tgz#f7a6b97073ab9e0f442fd38145e4150ffe909542"
-  integrity sha512-lnhfMrT8ZB9N1At3kMq2W2NkloNfxvMhcl0ew/+8sCqQfUDNGum+FujmdxIaDYsfdQDKcnMjVikfDaV207LVtw==
-  dependencies:
-    "@artdeco/clean-stack" "1.0.1"
-    erotic "2.0.2"
-
 catchment@3.3.0, catchment@^3.2.3, catchment@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/catchment/-/catchment-3.3.0.tgz#e57eb70183d6a75ee71da0cb8ec2e76ac01317d2"
@@ -336,13 +315,6 @@ erotic@2.0.1:
   integrity sha512-4J/dXhlM9lFYI5GvY4vS+W2M8w5Rmrj+Hh6y/GNb8u1YK6B/jszBMbMRJRDSSbTblbqDD23+97MrMl9hVxqmGg==
   dependencies:
     "@artdeco/clean-stack" "1.0.0"
-
-erotic@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/erotic/-/erotic-2.0.2.tgz#22d611ea49bcacdc577abb9fbff3af67cbc5c1e3"
-  integrity sha512-iH9zPUi+/Y6vuzSz7EBRKI25UiBliDz4/lH1+BubsZZBBBZ77xV3iUlkUT0xKOBHbOOWOoH5J5xeSVDqWR3ivQ==
-  dependencies:
-    "@artdeco/clean-stack" "1.0.1"
 
 erotic@^2.1.0:
   version "2.1.1"
@@ -426,13 +398,10 @@ koa-router@^7.4.0:
     path-to-regexp "^1.1.1"
     urijs "^1.19.0"
 
-logarithm@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/logarithm/-/logarithm-1.0.1.tgz#bdd08d5fa1c46c5181b34cd7e9e840cd126dba9e"
-  integrity sha512-CPZxT1Ou8IAgT4QYlh/0czs9ZyIbYOrEaQw15x/i77422fbCz3Y38WqTvng8GwCKg614fQ4qEO5ij1FdbCY2cg==
-  dependencies:
-    rqt "3.1.2"
-    uniqid "5.0.3"
+logarithm@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/logarithm/-/logarithm-2.0.0.tgz#84b3e356e7cfd1a56ff7abc82413720d2ca56cc5"
+  integrity sha512-xEKeYKeimQsSOg1OH1XfzsCdvmr3FY0keB4sqbceBzIgc6nkyqSNdYEwO6ySN0t8msMkmgjTBQs0KANsYS7rSg==
 
 makepromise@^3.0.3, makepromise@^3.1.0:
   version "3.1.0"
@@ -589,13 +558,6 @@ rqt@3.0.1:
   dependencies:
     "@rqt/aqt" "1.1.3"
 
-rqt@3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/rqt/-/rqt-3.1.2.tgz#8dd17751601655d831e8d007cf39ccbea0bea719"
-  integrity sha512-QE12FPzIy/7/P++Gpvph2bpC96jTcaKiAGejHGHPXiwGVpUMxhkmSuL+CVdK44a4V6XFLrY+ewigtI33FlN2zA==
-  dependencies:
-    "@rqt/aqt" "1.2.3"
-
 rqt@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/rqt/-/rqt-4.0.0.tgz#b57f64bf1b3b8b8109617f9dc67b9dd9ea5cb4d6"
@@ -701,11 +663,6 @@ unfetch@4.1.0, unfetch@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-4.1.0.tgz#6ec2dd0de887e58a4dee83a050ded80ffc4137db"
   integrity sha512-crP/n3eAPUJxZXM9T80/yv0YhkTEx2K1D3h7D1AJM6fzsWZrxdyRuLN0JH/dkZh1LNH8LxCnBzoPFCPbb2iGpg==
-
-uniqid@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/uniqid/-/uniqid-5.0.3.tgz#917968310edc868d50df6c44f783f32c7d80fac1"
-  integrity sha512-R2qx3X/LYWSdGRaluio4dYrPXAJACTqyUjuyXHoJLBUOIfmMcnYOyY2d6Y4clZcIz5lK6ZaI0Zzmm0cPfsIqzQ==
 
 urijs@^1.19.0:
   version "1.19.2"
