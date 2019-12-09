@@ -99,10 +99,10 @@
   resolved "https://registry.yarnpkg.com/@idio/github/-/github-1.0.4.tgz#f71956ee4bfbbd0ae4e5898988cd978f1cb70164"
   integrity sha512-dsWXlG/k+CiHooDy6oV0ayncBBSCsbtfaiVxALF1XgwjxHI2Q9ERWPp4SIzkT2ySXboRYppoJVaOMkpqzAsypQ==
 
-"@idio/idio@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@idio/idio/-/idio-0.2.0.tgz#16b385aaef4d3470af318d722df79a91da7c65d5"
-  integrity sha512-bMWwuWpHKshZCrUf8e3/+nxHsizM08I1PXdIu8zo0bIhKREx3EPJJVTeKYhtCLqXkk6bs3ErApOukoiHKskbrQ==
+"@idio/idio@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@idio/idio/-/idio-0.2.1.tgz#918f2b7bdd9b1fb9e69538addeda6ac983d9d88d"
+  integrity sha512-Ppw0CtETxOgte6YeisZgWeRYX/TF7d0Bomtimtyv42GpC0jJG6Wt/LIByWfyigRX6+Mdym73xk0dWJ+Q/Npj3g==
   dependencies:
     mime-db "^1.42.0"
 

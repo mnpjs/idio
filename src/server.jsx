@@ -63,7 +63,6 @@ export default async function Server({
     },
     nicer: {
       middlewareConstructor() {
-        /** @type {import('@typedefs/goa').Middleware} */
         return async (ctx, next) => {
           const boundary = getBoundary(ctx.req)
           const nicer = new Nicer({ boundary })
@@ -106,25 +105,22 @@ export default async function Server({
     },
     static: { use: PROD, root: 'docs' },
     session: { keys: [SESSION_KEY] },
-    jsonErrors: {
-      middlewareConstructor() {
-        return async (ctx, next) => {
-          try {
-            await next()
-          } catch (err) {
-            if (err.message.startsWith('!')) {
-              ctx.body = { error: err.message.replace('!', '') }
-              console.log(err.message)
-            } else {
-              ctx.body = { error: 'internal server error' }
-              err.stack = cleanStack(err.stack, {
-                ignoredModules: ['koa-compose', 'koa-router', 'koa-session'],
-              })
-              app.emit('error', err)
-            }
-          }
+
+    async jsonErrors(ctx, next) {
+      try {
+        await next()
+      } catch (err) {
+        if (err.message.startsWith('!')) {
+          ctx.body = { error: err.message.replace('!', '') }
+          console.log(err.message)
+        } else {
+          ctx.body = { error: 'internal server error' }
+          err.stack = cleanStack(err.stack, {
+            ignoredModules: ['koa-compose', 'koa-router', 'koa-session'],
+          })
+          app.emit('error', err)
         }
-      },
+      }
     },
   }, { port })
 
