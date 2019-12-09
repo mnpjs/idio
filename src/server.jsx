@@ -1,10 +1,11 @@
-import idio from '@idio/core'
+import idio from '@idio/idio'
 import { sync } from 'uid-safe'
 import render from '@depack/render'
 import initRoutes, { watchRoutes } from '@idio/router'
-import staticCache from 'koa-static-cache'
+import Router from 'koa-router'
 import linkedIn from '@idio/linkedin'
 import github from '@idio/github'
+import frontend from '@idio/frontend'
 import { getUser } from '@idio/linkedin'
 import logarithm from 'logarithm'
 import { collect } from 'catchment'
@@ -29,8 +30,7 @@ function getBoundary(req) {
 const {
   NODE_ENV,
   HOST = 'https://{{ name }}',
-  API = 'https://api.{{ name }}',
-  FRONT_END = 'https://www.{{ name }}',
+  FRONT_END = 'https://{{ frontend }}',
   CLOSURE, // for /comments page
   SESSION_KEY,
 } = process.env
@@ -39,14 +39,14 @@ const PROD = NODE_ENV == 'production'
 /**
  * Starts the server.
  */
-export default async ({
+export default async function Server({
   client, port, client_id, client_secret,
   watch = !PROD, elastic, Mongo, github_id, github_secret,
-}) => {
-  const { app, router, url, middleware } = await idio({
+}) {
+  const { app, url, middleware } = await idio({
     cors: {
       use: true,
-      origin: PROD && [API, FRONT_END, HOST, 'http://localhost:5001'],
+      origin: PROD && [FRONT_END, HOST, 'http://localhost:5001'],
       config: { credentials: true },
     },
     // logger: { use: !PROD },
@@ -94,14 +94,16 @@ export default async ({
       },
     },
     frontend: {
-      config: {
-        pragma: null,
-        override: {
-          preact: '/node_modules/preact/src/preact.js',
-        },
+      middlewareConstructor() {
+        return frontend()
       },
+      // config: {
+      //   pragma: null,
+      //   override: {
+      //     preact: '/node_modules/preact/src/preact.js',
+      //   },
+      // },
     },
-    sc: staticCache('static'),
     static: { use: PROD, root: 'docs' },
     session: { keys: [SESSION_KEY] },
     jsonErrors: {
@@ -125,6 +127,8 @@ export default async ({
       },
     },
   }, { port })
+
+  const router = new Router()
 
   Object.assign(app.context, {
     mongo: Mongo.db(),
@@ -192,8 +196,6 @@ export default async ({
   })
   if (watch) watchRoutes(w)
   app.use(router.routes())
-  app.use((ctx) => {
-    ctx.redirect(FRONT_END)
-  })
+  app.use(ctx => ctx.redirect(FRONT_END))
   return { app, url }
 }

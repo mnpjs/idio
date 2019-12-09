@@ -1,7 +1,7 @@
+import { connect } from 'mongodb'
 import { Client } from '@elastic/elasticsearch'
 import { c } from 'erte'
 import Server from './server'
-import { connect } from 'mongodb'
 
 const elastic = process.env.ELASTIC
 if (!elastic) throw new Error('Expecting ELASTIC env variable')

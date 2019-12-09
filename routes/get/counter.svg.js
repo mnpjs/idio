@@ -13,7 +13,6 @@ const counter = async (ctx) => {
   const { aggregations: {
     distinct_ips: { value: count },
   } } = await client.search({
-    type: 'hit',
     index: `${appName}-*`,
     body: {
       query: {
