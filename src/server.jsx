@@ -29,9 +29,8 @@ export default async function Server({
     cors: {
       use: true,
       origin: PROD && [FRONT_END, HOST, 'http://localhost:5001'],
-      config: { credentials: true },
+      credentials: true,
     },
-    // logger: { use: !PROD },
     compress: { use: true },
     logarithm: {
       middlewareConstructor() {
@@ -43,9 +42,7 @@ export default async function Server({
       },
       use: true,
     },
-    form: {
-
-    },
+    form: {},
     frontend: {
       use: true,
     },
@@ -62,7 +59,7 @@ export default async function Server({
         } else {
           ctx.body = { error: 'internal server error' }
           err.stack = cleanStack(err.stack, {
-            ignoredModules: ['koa-compose', 'koa-router', 'koa-session'],
+            // ignoredModules: ['koa-compose', 'koa-router', 'koa-session'],
           })
           app.emit('error', err)
         }
