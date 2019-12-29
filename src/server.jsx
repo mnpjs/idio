@@ -2,30 +2,12 @@ import idio from '@idio/idio'
 import { sync } from 'uid-safe'
 import render from '@depack/render'
 import initRoutes, { watchRoutes } from '@idio/router'
-import Router from 'koa-router'
 import linkedIn from '@idio/linkedin'
 import github from '@idio/github'
-import frontend from '@idio/frontend'
 import { getUser } from '@idio/linkedin'
 import logarithm from 'logarithm'
-import { collect } from 'catchment'
-import Nicer from 'nicer'
 import cleanStack from '@artdeco/clean-stack'
 import DefaultLayout from '../layout'
-
-function getBoundary(req) {
-  const contentType = req.headers['content-type']
-  if (!contentType) {
-    throw new Error('Content-type not found')
-  }
-  let boundary = /; boundary=(.+)/.exec(contentType)
-  if (!boundary) {
-    throw new Error('boundary not found')
-  }
-
-  ([, boundary] = boundary)
-  return boundary
-}
 
 const {
   NODE_ENV,
@@ -43,7 +25,7 @@ export default async function Server({
   client, port, client_id, client_secret, appName,
   watch = !PROD, elastic, Mongo, github_id, github_secret,
 }) {
-  const { app, url, middleware } = await idio({
+  const { app, url, middleware, router } = await idio({
     cors: {
       use: true,
       origin: PROD && [FRONT_END, HOST, 'http://localhost:5001'],
@@ -61,47 +43,11 @@ export default async function Server({
       },
       use: true,
     },
-    nicer: {
-      middlewareConstructor() {
-        return async (ctx, next) => {
-          const boundary = getBoundary(ctx.req)
-          const nicer = new Nicer({ boundary })
-          ctx.req.pipe(nicer)
-          const p = []
-          await new Promise((r, j) => {
-            nicer
-              .on('data', ({ header, stream }) => {
-                const collected = collect(stream).then((data) => {
-                  const s = header.toString()
-                  const n = /Content-Disposition: form-data; name="(.+)"/.exec(s)
-                  if (!n) throw new Error('Field name not found')
-                  const [,name] = n
-                  return { name, data }
-                })
-                p.push(collected)
-              })
-              .on('end', r)
-              .on('error', j)
-          })
-          const body = await Promise.all(p)
-          ctx.request.body = body.reduce((acc, { name, data }) => {
-            acc[name] = data
-            return acc
-          }, {})
-          await next()
-        }
-      },
+    form: {
+
     },
     frontend: {
-      middlewareConstructor() {
-        return frontend()
-      },
-      // config: {
-      //   pragma: null,
-      //   override: {
-      //     preact: '/node_modules/preact/src/preact.js',
-      //   },
-      // },
+      use: true,
     },
     static: { use: PROD, root: 'docs' },
     session: { keys: [SESSION_KEY] },
@@ -123,8 +69,6 @@ export default async function Server({
       }
     },
   }, { port })
-
-  const router = new Router()
 
   Object.assign(app.context, {
     mongo: Mongo.db(),
