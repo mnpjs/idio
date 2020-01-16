@@ -41,7 +41,7 @@ export default class List extends Component {
       'last-comment-id': lastCommentId,
     })
     try {
-      const f = await fetch(`${host}/json-comments${i}`, {
+      const f = await fetch(`${host}/api/comments${i}`, {
         credentials: 'include',
       })
       const { 'comments': comments, csrf } = await f.json()
@@ -112,7 +112,7 @@ class Item extends Component {
         const c = confirm('Are you sure you want to delete comment?')
         if (!c) return false
         try {
-          const f = await fetch(`${host}/remove-comment?csrf=${csrf}&id=${_id}`, {
+          const f = await fetch(`${host}/api/remove-comment/${_id}?csrf=${csrf}`, {
             credentials: 'include',
           })
           const { error: er } = await f.json()

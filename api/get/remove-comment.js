@@ -6,10 +6,7 @@ import { ObjectID } from 'mongodb'
  */
 export default async (ctx) => {
   const { linkedin_user, github_user } = ctx.session
-
-  const { id } = ctx.request.query
-
-  if (!id) throw new Error('!Comment ID is missing.')
+  const { id } = ctx.params
 
   const Comments = ctx.mongo.collection('comments')
   const oid = new ObjectID(id)
@@ -37,20 +34,9 @@ export default async (ctx) => {
   })
 
   ctx.body = { ok: f.ok }
-
-  // const { linkedin_user, github_user, csrf } = ctx.session
-  // ctx.body = /** @type {Auth} */ ({
-  //   linkedin_user,
-  //   github_user: github_user ? {
-  //     login: github_user.login,
-  //     name: github_user.name,
-  //     avatar_url: github_user.avatar_url,
-  //     html_url: github_user.html_url,
-  //   }: undefined,
-  //   csrf,
-  // })
 }
 
+export const aliases = ['/remove-comment/:id']
 export const middleware = ['checkCsrf']
 
 /**
