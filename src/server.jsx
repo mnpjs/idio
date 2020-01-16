@@ -1,4 +1,4 @@
-import idio from '@idio/idio'
+import idio, { Router } from '@idio/idio'
 import { sync } from 'uid-safe'
 import render from '@depack/render'
 import initRoutes, { watchRoutes } from '@idio/router'
@@ -48,19 +48,28 @@ export default async function Server({
     },
     static: { use: PROD, root: 'docs' },
     session: { keys: [SESSION_KEY] },
-
+    forms: {
+      middlewareConstructor() {
+        return async (ctx, next) => {
+          const f = middleware.form.any()
+          await f(ctx, next)
+        }
+      },
+    },
+    csrfCheck: {},
     async jsonErrors(ctx, next) {
       try {
         await next()
       } catch (err) {
+        if (err.statusCode && err.statusCode >= 400 && err.statusCode <= 500) {
+          err.message = err.message.replace(/^([^!])/, '!$1')
+        }
         if (err.message.startsWith('!')) {
           ctx.body = { error: err.message.replace('!', '') }
           console.log(err.message)
         } else {
           ctx.body = { error: 'internal server error' }
-          err.stack = cleanStack(err.stack, {
-            // ignoredModules: ['koa-compose', 'koa-router', 'koa-session'],
-          })
+          err.stack = cleanStack(err.stack)
           app.emit('error', err)
         }
       }
@@ -131,8 +140,19 @@ export default async function Server({
   const w = await initRoutes(router, 'routes', {
     middleware,
   })
-  if (watch) watchRoutes(w)
+  const apiRouter = new Router()
+  const w2 = await initRoutes(apiRouter, 'api', {
+    middleware,
+  })
+  if (watch) {
+    watchRoutes(w)
+    watchRoutes(w2)
+  }
+  router.use('/api',
+    middleware.cors, middleware.session, middleware.jsonErrors,
+    apiRouter.routes()
+  )
   app.use(router.routes())
-  app.use(ctx => ctx.redirect(FRONT_END))
+  // app.use(ctx => ctx.redirect(FRONT_END))
   return { app, url }
 }

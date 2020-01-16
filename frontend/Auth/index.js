@@ -1,5 +1,5 @@
 import { Component } from 'preact'
-import callbackFetch from '../fetch'
+import unfetch from 'unfetch'
 
 /**
  * Fetches authorisation data from the server.
@@ -21,18 +21,19 @@ export default class App extends Component {
   componentDidMount() {
     this.auth()
   }
-  auth() {
+  async auth() {
     this.setState({ loading: true })
-    callbackFetch(`${this.props.host}/auth`, (error, res) => {
-      this.setState({ loading: false })
-      if (error) {
-        return this.setState({ error })
-      }
-      const auth = res.json()
+    try {
+      const res = await unfetch(`${this.props.host}/api/auth`, {
+        credentials: 'include',
+      })
+      const auth = await res.json()
       this.setState({ auth })
-    }, {
-      credentials: 'include',
-    })
+    } catch (err) {
+      this.setState({ error: err.message })
+    } finally {
+      this.setState({ loading: false })
+    }
   }
   /**
    * @param {!MessageEvent} event

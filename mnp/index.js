@@ -4,7 +4,7 @@
 const config = {
   files: {
     filenames(a) {
-      return [...a, 'CNAME']
+      return [...a, 'CNAME', '.env', '.settings']
     },
   },
   questions: {

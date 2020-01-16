@@ -13,8 +13,6 @@ export default (ctx) => {
   })
 }
 
-export const middleware = ['session']
-
 /**
  * @suppress {nonStandardJsDocs}
  * @typedef {import('../../').Auth} Auth
