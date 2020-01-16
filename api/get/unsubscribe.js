@@ -4,23 +4,22 @@
  */
 export default async (ctx) => {
   const { query: { comments, lambda }, mongo } = ctx
-  const { key } = ctx.params
-  if (!key) throw new Error('!Key is required')
+  const { p256dh } = ctx.params
 
   if (comments) {
     const subscriptions = mongo.collection('Subscriptions')
-    const res = await subscriptions.updateOne({ p256dh: key }, { $set: {
+    const res = await subscriptions.updateOne({ p256dh }, { $set: {
       comments: false,
     } })
     ctx.body = { comments: false }
     return
   } else if (lambda) {
     const subscriptions = mongo.collection('LambdaSubscriptions')
-    const res = await subscriptions.deleteOne({ p256dh: key })
+    const res = await subscriptions.deleteOne({ p256dh })
     ctx.body = { comments: false }
     return
   }
   ctx.body = {}
 }
 
-export const alises = ['/unsubscribe/:key']
+export const alises = ['/unsubscribe/:p256dh']
