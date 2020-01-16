@@ -22,4 +22,4 @@ export default async (ctx) => {
   ctx.body = {}
 }
 
-export const alises = ['/unsubscribe/:p256dh']
+export const aliases = ['/unsubscribe/:p256dh']

@@ -46,7 +46,7 @@ export default async function Server({
     frontend: {
       use: true,
     },
-    static: { use: PROD, root: 'docs' },
+    static: { use: PROD || CLOSURE, root: 'docs' },
     session: { keys: [SESSION_KEY] },
     forms: {
       middlewareConstructor() {
