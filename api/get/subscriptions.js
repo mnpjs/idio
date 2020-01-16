@@ -14,4 +14,4 @@ export default async (ctx) => {
   ctx.body = { comments: res.comments }
 }
 
-export const alises = ['/subscriptions/:p256dh']
+export const aliases = ['/subscriptions/:p256dh']
