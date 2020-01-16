@@ -37,7 +37,7 @@ export default async (ctx) => {
 }
 
 export const aliases = ['/remove-comment/:id']
-export const middleware = ['checkCsrf']
+export const middleware = ['csrfCheck']
 
 /**
  * @suppress {nonStandardJsDocs}
