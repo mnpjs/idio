@@ -1,22 +1,22 @@
-import callbackFetch from '../fetch'
 import { getUserData } from './lib'
+import unfetch from 'unfetch'
 
-const signOut = (host, csrf, cb) => {
+const signOut = async (host, csrf, cb) => {
   const formData = new FormData()
   formData.append('csrf', csrf)
 
-  callbackFetch(`${host}/signout`, (err, res) => {
-    if (err) return cb(err)
-    const { error } = res.json()
-    cb(error)
-  }, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-    },
-    body: formData,
-    credentials: 'include',
-  })
+  try {
+    const res = await unfetch(`${host}/api/signout`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    })
+    const { error } = await res.json()
+    if (error) cb(error)
+    else cb()
+  } catch (err) {
+    cb(err.message)
+  }
 }
 
 /**

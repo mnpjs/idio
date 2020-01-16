@@ -8,21 +8,55 @@ class App extends Auth {
   constructor() {
     super()
     this.list = null
+    this.state = {
+      auth: {},
+    }
+  }
+  get signedIn() {
+    const { auth } = this.state
+    const signedIn = auth.github_user || auth.linkedin_user
+    return signedIn
+  }
+  getChildContext() {
+    return {
+      signedIn: this.signedIn,
+      host: this.props.host,
+      replyTo: this.state.replyTo,
+      setReply: (val) => {
+        if (val === null) {
+          this.setState({ replyTo: undefined })
+        } else {
+          const { id, name, expandResponses } = val
+          document.querySelector('[data-id="comment-text-area"]').scrollIntoView({
+            behavior: 'smooth',
+          })
+          this.setState({ replyTo: { id, name, expandResponses } })
+        }
+      },
+    }
   }
   render() {
+    const { auth, loading, error } = this.state
+
     return (<div>
-      <AppUser error={this.state.error} loading={this.state.loading} auth={this.state.auth} host={this.props.host} onSignOut={() => {
-        this.setState({ auth: {} })
-      }} />
+      <AppUser error={error} loading={loading} auth={auth} host={this.props.host}
+        onSignOut={() => {
+          this.setState({ auth: {} })
+        }} />
 
-      <CommentForm host={this.props.host} path={`${this.props.host}/comment`} auth={this.state.auth} submitFinish={async (res) => {
-        const { 'error': error, id } = await res.json()
-        if (!error && id) {
-          if (this.list) this.list.fetch(id)
-        }
-      }} />
+      <CommentForm
+        path={`${this.props.host}/comment`} auth={auth}
+        submitFinish={async (res) => {
+          const { 'error': err, id } = await res.json()
+          if (!err && id) {
+            debugger
+            const { replyTo: { expandResponses } = {} } = this.state
+            if (expandResponses) expandResponses(id)
+            else if (this.list) this.list.fetch(id)
+          }
+        }} />
 
-      <List host={this.props.host} ref={(e) => {
+      <List ref={(e) => {
         this.list = e
       }} />
 

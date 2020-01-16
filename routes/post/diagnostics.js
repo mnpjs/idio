@@ -1,4 +1,5 @@
 /**
+ * Used by Splendid's diagnostics component.
  * @type {import('../../').Middleware}
  */
 export default async function (ctx) {
@@ -12,8 +13,7 @@ export default async function (ctx) {
       referrer,
     },
   })
-  ctx.status = 200
-  ctx.body = ''
+  ctx.status = 204
 }
 
-export const middleware = ['nicer']
+export const middleware = ['forms']
