@@ -43,6 +43,10 @@ Auth.prototype.github_user
  */
 Auth.prototype.csrf
 /**
- * @typedef {{ _id: (string|undefined), isAuthor: (boolean|undefined), country: (string|undefined), name: (string|undefined), photo: (string|undefined), comment: string, date: Date, github_user: _idio.GithubUser, linkedin_user: LinkedInUser }}
+ * @typedef {{ _id: (string|undefined), isAuthor: (boolean|undefined), country: (string|undefined), ip: (string|undefined), name: (string|undefined), photo: (string|undefined), path: (boolean|undefined), hideGithub: (boolean|undefined), comment: string, subId: (string|undefined), replyTo: (string|undefined), replies: (number|undefined), date: Date, github_user: _idio.GithubUser, linkedin_user: LinkedInUser }}
  */
 var WebsiteComment
+/**
+ * @typedef {{ title: (string|undefined), body: (boolean|undefined), icon: (string|undefined), url: (string|undefined) }}
+ */
+var PushNotification

@@ -30,11 +30,24 @@
     <prop string name="_id" opt>id.</prop>
     <prop boolean name="isAuthor" opt>Whether the current session user wrote this comment.</prop>
     <prop string name="country" opt>The country name.</prop>
+    <prop string name="ip" opt>The IP address.</prop>
     <prop string name="name" opt>The display name.</prop>
     <prop string name="photo" opt>The photo to show.</prop>
+    <prop boolean name="path" opt>The path where the comment was left on.</prop>
+    <prop boolean name="hideGithub" opt>Whether to hide GitHub profile.</prop>
     <prop string name="comment">The text of the comment.</prop>
+    <prop string name="subId" opt>The web push subscription ID.</prop>
+    <prop string name="replyTo" opt>The ID of the comment which was replied to.</prop>
+    <prop number name="replies" opt>The number of replies.</prop>
     <prop type="Date" name="date">When the comment was added.</prop>
     <prop type="_idio.GithubUser" name="github_user">GitHub user, if logged in.</prop>
-    <prop type="LinkedInUser" name="linkedin_user">Linkedin user, if logged in.</prop>
+    <prop type="LinkedInUser" name="linkedin_user">LinkedIn user, if logged in.</prop>
+  </type>
+
+  <type name="PushNotification">
+    <prop string name="title" opt>Title of the notification.</prop>
+    <prop boolean name="body" opt>Body of the notification.</prop>
+    <prop string name="icon" opt>The icon to show.</prop>
+    <prop string name="url" opt>The URL to open on click.</prop>
   </type>
 </types>
