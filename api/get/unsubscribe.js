@@ -3,7 +3,8 @@
  * @type {import('../../').Middleware}
  */
 export default async (ctx) => {
-  const { query: { key, comments, lambda }, mongo } = ctx
+  const { query: { comments, lambda }, mongo } = ctx
+  const { key } = ctx.params
   if (!key) throw new Error('!Key is required')
 
   if (comments) {
@@ -21,3 +22,5 @@ export default async (ctx) => {
   }
   ctx.body = {}
 }
+
+export const alises = ['/unsubscribe/:key']

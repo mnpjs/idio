@@ -3,7 +3,7 @@ import render from '@depack/render'
 export {}
 /**
  * @typedef {{ admin: boolean, github_token: string, linkedin_token: string } & Auth} Session
- * @typedef {import('@typedefs/goa').Context & { render: typeof render, client: elastic.Client, session: Session, mongo: mongodb.Db }} Context
+ * @typedef {import('@idio/idio').Context & { render: typeof render, client: elastic.Client, session: Session, mongo: mongodb.Db }} Context
  * @typedef {(ctx: Context, next: Middleware) => Promise} Middleware
  */
 

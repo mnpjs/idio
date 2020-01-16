@@ -34,7 +34,7 @@ export default class Subscriptions extends Component {
     if (!p256dh) return
     this.setState({ loading: true })
     try {
-      const res = await fetch(`${this.props.host}/unsubscribe?comments=true&key=${p256dh}`)
+      const res = await fetch(`${this.props.host}/api/unsubscribe/${p256dh}?comments=true`)
       const { 'comments': comments } = await res.json()
       if (comments === false) this.setState({ p256dh: undefined })
     } finally {

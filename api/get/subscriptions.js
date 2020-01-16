@@ -3,13 +3,15 @@
  * @type {import('../../').Middleware}
  */
 export default async (ctx) => {
-  const { query: { key }, mongo } = ctx
-  if (!key) throw new Error('!Key is required')
+  const { mongo } = ctx
+  const { p256dh } = ctx.params
   const subscriptions = mongo.collection('Subscriptions')
 
   const res = await subscriptions.findOne({
-    p256dh: key,
+    p256dh,
   })
   if (!res) return ctx.body = {}
   ctx.body = { comments: res.comments }
 }
+
+export const alises = ['/subscriptions/:p256dh']
