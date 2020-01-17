@@ -3,7 +3,10 @@ import { createHash } from 'crypto'
 
 const { CAPTCHA_KEY } = process.env
 
-/** @type {import('../..').Middleware} */
+/**
+ * Generates captcha that should then be verified.
+ * @type {import('../..').Middleware}
+ */
 export default async (ctx) => {
   if (!CAPTCHA_KEY) throw new Error('!Server error: no captcha secret.')
   const { data, text } = create({ noise: 3, color: true, size: 5, ignoreChars: '0o1iIlO' })
@@ -12,5 +15,3 @@ export default async (ctx) => {
     data, hash,
   }
 }
-
-export const middleware = ['jsonErrors']

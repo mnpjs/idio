@@ -28,7 +28,7 @@ export default async function Server({
   const { app, url, middleware, router } = await idio({
     cors: {
       use: true,
-      origin: PROD && [FRONT_END, HOST, 'http://localhost:5001'],
+      origin: PROD && [FRONT_END, HOST, 'http://localhost:3000'],
       credentials: true,
     },
     compress: { use: true },
@@ -42,10 +42,10 @@ export default async function Server({
       },
       use: true,
     },
-    form: {},
-    frontend: {
-      use: true,
+    form: {
+      dest: 'upload',
     },
+    frontend: { use: !PROD },
     static: { use: PROD || CLOSURE, root: 'docs' },
     session: { keys: [SESSION_KEY] },
     forms: {
@@ -80,6 +80,7 @@ export default async function Server({
     mongo: Mongo.db(),
     prod: PROD,
     HOST: PROD ? HOST : url,
+    STATIC: PROD ? '{{ static }}' : url,
     CLOSURE: PROD || CLOSURE,
     client, appName,
     render: (vnode, props = {}, Layout = DefaultLayout) => {
@@ -93,7 +94,7 @@ export default async function Server({
   })
 
   if (CLOSURE)
-    console.log('Testing Closure bundle: %s', 'closure/comments.js')
+    console.log('Testing Closure bundle: %s', 'docs/comments.js')
   const li = {
     session: middleware.session,
     client_id,

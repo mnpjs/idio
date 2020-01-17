@@ -1,3 +1,7 @@
+/**
+ * Experimenting with hot-module-reload.
+ */
+
 // import { getMap } from 'alamode/build/lib/source-map'
 import { basename, dirname } from 'path'
 

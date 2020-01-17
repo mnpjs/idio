@@ -40,7 +40,7 @@ webpush.setVapidDetails('https://{{ name }}', public_vapid, private_vapid)
       github_id: process.env.GITHUB_ID,
       github_secret: process.env.GITHUB_SECRET,
       elastic, Mongo,
-      appName: 'open-source.artdeco.app',
+      appName: '{{ name }}',
     })
     console.log('Started on %s', c(url, 'green'))
   } catch ({ stack }) {

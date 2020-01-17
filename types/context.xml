@@ -1,0 +1,29 @@
+<types>
+  <import from="mongodb" name="Db"/>
+  <import name="Context" from="@idio/idio" ns="_idio" />
+  <import from="@elastic/elasticsearch" ns="elastic" name="Client"/>
+
+  <record name="Context" extends="_idio.Context">
+    <prop boolean name="prod">
+      Whether the server is running on production. This will be the case when `NODE_ENV=production`.
+    </prop>
+    <prop string name="HOST">
+      The address of the backend host. On dev, set to `http://localhost:5000`.
+    </prop>
+    <prop string name="STATIC">
+      The name of the static host. On dev, set to `http://localhost:5000`.
+    </prop>
+    <prop boolean name="CLOSURE">
+      Whether testing the _Closure-compiled_ front-end build from `docs`, instead of using `frontend` middleware for development.
+    </prop>
+    <prop string name="appName" default="{{ name }}">
+      The name of the app.
+    </prop>
+    <prop type="!mongodb.Db" name="mongo">
+      An instance of the database, from `Mongo.db()`.
+    </prop>
+    <prop type="!elastic.Client" name="client">
+      An instance of the _ElasticSearch_ client.
+    </prop>
+  </record>
+</types>

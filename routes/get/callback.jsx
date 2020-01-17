@@ -1,6 +1,9 @@
 /* eslint-disable react/jsx-key */
 
-/** @type {import('../../').Middleware} */
+/**
+ * Required to complete OAuth sign in.
+ * @type {import('../../').Middleware}
+ */
 export default function callback(ctx) {
   const { error } = ctx.query
   ctx.body = ctx.render([

@@ -1,6 +1,4 @@
 <types>
-  <import from="@elastic/elasticsearch" ns="elastic" name="Client"/>
-  <import from="mongodb" name="Db"/>
   <import from="@idio/github" ns="_idio" name="GithubUser"/>
   <import from="@typedefs/goa" ns="_goa" name="Middleware"/>
 
