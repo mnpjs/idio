@@ -12,8 +12,9 @@ export default class CommentForm extends SubmitForm {
   }
   async componentWillMount() {
     try {
-      const res = await fetch('https://freegeoip.app/json/', {})
-      const { 'country_code': country_code } = await res.json()
+      const {
+        'country_code': country_code,
+      } = await this.context.fetch('https://freegeoip.app/json/')
       if (country_code) {
         this.setState({ country_code })
       }
@@ -25,7 +26,7 @@ export default class CommentForm extends SubmitForm {
    * @param {!Object} [props]
    * @param {Auth} [props.auth]
    */
-  render({ onChange, auth, ...props
+  render({ onChange, auth, scope, ...props
   }) {
     const { host, signedIn, setReply,
       replyTo: { id: replyTo, name: replyToName } = {} } = this.context
@@ -76,7 +77,7 @@ export default class CommentForm extends SubmitForm {
           </a>
         </div>}
       </FormGroup>
-      <Subscriptions disabled={!signedIn} host={host} />
+      <Subscriptions disabled={!signedIn} host={host} scope={scope}/>
       <SubmitButton disabled={!signedIn} loading={formLoading} type="warning"
         confirmText="Submit Data" />
       {error && `Error: ${error}`}

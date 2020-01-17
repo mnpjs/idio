@@ -3,10 +3,7 @@ import render from '@depack/render' // eslint-disable-line
 export {}
 /**
  * @typedef {{ admin: boolean, github_token: string, linkedin_token: string } & Auth} Session
- * @typedef {Context & {
- *  render: typeof render,
- *  session: Session,
- * }} _Context
+ * @typedef {Context & { render: typeof render, session: Session }} _Context
  * @typedef {(ctx: _Context, next: Middleware) => Promise} Middleware
  */
 

@@ -4,8 +4,9 @@ import { checkSubscribed, subscribe } from '../client'
 
 export default class Subscriptions extends Component {
   async getRegister() {
-    const register = await navigator.serviceWorker.register('/service-worker.js', {
-      scope: '/',
+    const { scope = '/' } = this.props
+    const register = await navigator.serviceWorker.register(`${scope}service-worker.js`, {
+      scope,
     })
     return register
   }
@@ -34,8 +35,11 @@ export default class Subscriptions extends Component {
     if (!p256dh) return
     this.setState({ loading: true })
     try {
-      const res = await fetch(`${this.props.host}/api/unsubscribe/${p256dh}?comments=true`)
-      const { 'comments': comments } = await res.json()
+      const { 'comments': comments } = await this.context.fetch(`unsubscribe/${p256dh}`, {
+        query: {
+          'comments': true,
+        },
+      })
       if (comments === false) this.setState({ p256dh: undefined })
     } finally {
       this.setState({ loading: false })

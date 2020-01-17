@@ -1,4 +1,5 @@
 import { render } from 'preact'
+import unfetch from 'unfetch'
 import CommentForm from './Form'
 import Auth from '../Auth'
 import AppUser from '../Auth/AppUser'
@@ -18,9 +19,10 @@ class App extends Auth {
     return signedIn
   }
   getChildContext() {
+    const { host } = this.props
     return {
       signedIn: this.signedIn,
-      host: this.props.host,
+      host,
       replyTo: this.state.replyTo,
       setReply: (val) => {
         if (val === null) {
@@ -33,9 +35,19 @@ class App extends Auth {
           this.setState({ replyTo: { id, name, expandResponses } })
         }
       },
+      async fetch(path, { query, ...options } = {}) {
+        if (!path) throw new Error('No path given')
+        if (query) path += App.serialize(query)
+        if (path.startsWith('/')) path = path.replace('/', '')
+        const url = /^https?:/.test(path) ? path : `${host}/api/${path}`
+        const res = await unfetch(url, options)
+        const { 'error': error, ...rest } = await res.json()
+        if (error) throw new Error(error)
+        return rest
+      },
     }
   }
-  render() {
+  render({ scope }) {
     const { auth, loading, error } = this.state
 
     return (<div>
@@ -45,16 +57,15 @@ class App extends Auth {
         }} />
 
       <CommentForm
-        path={`${this.props.host}/comment`} auth={auth}
+        path={`${this.props.host}/api/comment`} auth={auth}
         submitFinish={async (res) => {
           const { 'error': err, id } = await res.json()
           if (!err && id) {
-            debugger
             const { replyTo: { expandResponses } = {} } = this.state
             if (expandResponses) expandResponses(id)
             else if (this.list) this.list.fetch(id)
           }
-        }} />
+        }} scope={scope}/>
 
       <List ref={(e) => {
         this.list = e
@@ -62,10 +73,23 @@ class App extends Auth {
 
     </div>)
   }
+  static serialize(obj) {
+    let str = []
+    for (let p in obj)
+      if (obj.hasOwnProperty(p)) {
+        const val = obj[p]
+        if (val === undefined) continue
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(val))
+      }
+    const s = str.join("&")
+    if (!s.length) return ''
+    return `?${s}`
+  }
 }
 
 window['comments'] = ({
-  'host': host = 'https://api.{{ name }}', 'container': container = 'preact',
+  'host': host = 'https://{{ name }}', 'container': container = 'preact-div',
+  'scope': scope,
 }) => {
-  render(<App host={host}/>, document.getElementById(container))
+  render(<App host={host} scope={scope}/>, document.getElementById(container))
 }

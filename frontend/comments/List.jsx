@@ -1,5 +1,4 @@
 import { Component } from 'preact'
-import fetch from 'unfetch'
 import './style.css'
 
 export default class List extends Component {
@@ -15,36 +14,26 @@ export default class List extends Component {
   componentDidMount() {
     this.fetch()
   }
-  serialize(obj) {
-    let str = []
-    for (let p in obj)
-      if (obj.hasOwnProperty(p)) {
-        const val = obj[p]
-        if (val === undefined) continue
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(val))
-      }
-    const s = str.join("&")
-    if (!s.length) return ''
-    return `?${s}`
-  }
   /**
    * @param {string} [id]
    * @param {string} [lastCommentId]
    */
   async fetch(id, lastCommentId) {
     this.setState({ loading: true })
-    const { host } = this.context
     const { responseTo } = this.props
-    const i = this.serialize({
+    const query = {
       id,
       'reply-to': responseTo,
       'last-comment-id': lastCommentId,
-    })
+    }
     try {
-      const f = await fetch(`${host}/api/comments${i}`, {
+      const {
+        'comments': comments,
+        csrf,
+      } = await this.context.fetch('comments', {
         credentials: 'include',
+        query,
       })
-      const { 'comments': comments, csrf } = await f.json()
       const c = lastCommentId ? [...this.state.comments, ...comments] :
         [...comments, ...this.state.comments]
       this.setState({ comments: c, csrf })
@@ -56,8 +45,6 @@ export default class List extends Component {
   }
   render({ totalItems = Infinity }) {
     const { error, loading, comments, csrf } = this.state
-    console.log(totalItems, comments.length)
-    // debugger
     if (error)
       return (<div>Error loading list: {error}</div>)
 
@@ -102,7 +89,7 @@ class Item extends Component {
   render({ comment: {
     _id, country, isAuthor, name, photo, comment, date, github_user,
     replies }, onRemove, csrf }) {
-    const { signedIn, host, setReply } = this.context
+    const { signedIn, setReply } = this.context
     const { expandResponses } = this.state
     return (<div className="comment">
       <strong>{name || 'Anonymous'}</strong>{<Login github_user={github_user}/>}
@@ -112,12 +99,13 @@ class Item extends Component {
         const c = confirm('Are you sure you want to delete comment?')
         if (!c) return false
         try {
-          const f = await fetch(`${host}/api/remove-comment/${_id}?csrf=${csrf}`, {
+          await this.context.fetch(`remove-comment/${_id}`, {
             credentials: 'include',
+            query: {
+              'csrf': csrf,
+            },
           })
-          const { error: er } = await f.json()
-          if (er) alert(er)
-          else onRemove(_id)
+          onRemove(_id)
         } catch(err) {
           alert(err.message)
         }

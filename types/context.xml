@@ -14,7 +14,7 @@
       The name of the static host. On dev, set to `http://localhost:5000`.
     </prop>
     <prop boolean name="CLOSURE">
-      Whether testing the _Closure-compiled_ front-end build from `docs`, instead of using `frontend` middleware for development.
+      Whether serving the _Closure-compiled_ front-end build from `docs`, instead of using `frontend` middleware for development. This will be true on prod, and when running the server via `closure` _package.json_ script.
     </prop>
     <prop string name="appName" default="{{ name }}">
       The name of the app.
