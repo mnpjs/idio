@@ -6,4 +6,4 @@ export default (ctx) => {
   ctx.body = { ok: 1 }
 }
 
-export const middleware = ['csrfCheck']
+export const middleware = ['forms', 'csrfCheck']
