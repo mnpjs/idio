@@ -1,5 +1,4 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { sync } from 'uid-safe'
 
 /**
  * @type {Template}
@@ -49,6 +48,7 @@ const config = {
   async afterInit({ org, name }, { git, loading, github, initManager }) {
     await initManager()
     const { generateVAPIDKeys } = require('web-push')
+    const { sync } = require('uid-safe')
     const { publicKey, privateKey } = generateVAPIDKeys()
     let env = readFileSync('.env', 'utf8')
     env = `\nPUBLIC_VAPID=${publicKey}\nPRIVATE_VAPID=${privateKey}`
