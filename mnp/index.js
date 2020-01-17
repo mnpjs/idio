@@ -42,6 +42,16 @@ const config = {
         }
       },
     },
+    dokku: {
+      text: 'Dokku Host (type - for no host)',
+      getDefault ({ name }) {
+        return name
+      },
+      async afterQuestions({ git }, dokku, { name }) {
+        if (name == '-') return null
+        await git('remote', 'add', 'origin', `dokku@${dokku}:${name}`)
+      },
+    },
   },
   async afterInit({ org, name }, { git, loading, github, initManager, updateFiles }) {
     await initManager()
