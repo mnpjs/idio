@@ -4,7 +4,7 @@
  * @param {string} props.src
  */
 export const Script = ({ ctx, src }) => {
-  if (ctx.CLOSURE) return (<script type="module" src={`frontend/${src}`}></script>)
+  if (!ctx.CLOSURE) return (<script type="module" src={`frontend/${src}`}></script>)
 
   let s = src.startsWith('/') ? src : `/${src}`
   s = ctx.STATIC + s
