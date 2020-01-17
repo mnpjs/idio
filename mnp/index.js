@@ -66,11 +66,11 @@ const config = {
       },
       {
         re: /SESSION_KEY=001101/,
-        replacement: sync(18),
+        replacement: `SESSION_KEY=${sync(18)}`,
       },
       {
         re: /CAPTCHA_KEY=catpcha/,
-        replacement: sync(18),
+        replacement: `CAPTCHA_KEY=${sync(18)}`,
       },
     ], { file: '.env' })
     await loading('Enabling Pages on docs', github.pages.enable(org, name))
