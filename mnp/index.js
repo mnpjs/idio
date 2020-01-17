@@ -47,7 +47,8 @@ const config = {
       },
     },
   },
-  async afterInit({ org, name }, { git, loading, github }) {
+  async afterInit({ org, name }, { git, loading, github, initManager }) {
+    await initManager()
     const { publicKey, privateKey } = generateVAPIDKeys()
     let env = readFileSync('.env', 'utf8')
     env = `\nPUBLIC_VAPID=${publicKey}\nPRIVATE_VAPID=${privateKey}`
