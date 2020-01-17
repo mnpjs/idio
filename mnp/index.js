@@ -53,8 +53,9 @@ const config = {
     let env = readFileSync('.env', 'utf8')
     env = `\nPUBLIC_VAPID=${publicKey}\nPRIVATE_VAPID=${privateKey}`
     const session = sync(18)
+    const captcha = sync(18)
     env = env.replace('SESSION_KEY=001101', `SESSION_KEY=${session}`)
-    env = env.replace('CAPTCHA_KEY=catpcha', `CAPTCHA_KEY=${session}`)
+    env = env.replace('CAPTCHA_KEY=catpcha', `CAPTCHA_KEY=${captcha}`)
     writeFileSync('.env', env)
     await loading('Enabling Pages on docs', github.pages.enable(org, name))
     await git(['rm', '--cached', '.env', '.settings'])
