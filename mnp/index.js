@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from 'fs'
 const config = {
   files: {
     filenames(a) {
-      return [...a, 'CNAME', '.env', '.settings']
+      return [...a, '.env', '.settings']
     },
   },
   questions: {
