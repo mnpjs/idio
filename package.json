@@ -64,6 +64,7 @@
     "@typedefs/goa": "^0.1.5",
     "alamode": "3.3.0",
     "depack": "^1.0.1",
+    "dokku": "^0.1.1",
     "preact": "8.5.3",
     "restream": "3.7.4",
     "rqt": "4.0.0",

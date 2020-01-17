@@ -49,7 +49,7 @@ const config = {
       },
       async afterQuestions({ git }, dokku, { name }) {
         if (name == '-') return null
-        await git('remote', 'add', 'origin', `dokku@${dokku}:${name}`)
+        await git('remote', 'add', 'dokku', `dokku@${dokku}:${name}`)
       },
     },
   },
