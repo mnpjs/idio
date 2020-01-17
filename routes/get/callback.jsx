@@ -17,5 +17,3 @@ export default function callback(ctx) {
     </script>,
   ], { title: 'Sign In Callback' })
 }
-
-// export const middleware = (r) => ['session', r]
