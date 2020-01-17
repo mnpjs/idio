@@ -49,14 +49,20 @@ const config = {
     const { sync } = require('uid-safe')
     const { publicKey, privateKey } = generateVAPIDKeys()
     let env = `\nPUBLIC_VAPID=${publicKey}\nPRIVATE_VAPID=${privateKey}`
-    const session = sync(18)
-    const captcha = sync(18)
-    env = env.replace('SESSION_KEY=001101', `SESSION_KEY=${session}`)
-    env = env.replace('CAPTCHA_KEY=catpcha', `CAPTCHA_KEY=${captcha}`)
-    await updateFiles({
-      re: /$/,
-      replacement: env,
-    }, { file: '.env' })
+    await updateFiles([
+      {
+        re: /$/,
+        replacement: env,
+      },
+      {
+        re: /SESSION_KEY=001101/,
+        replacement: sync(18),
+      },
+      {
+        re: /CAPTCHA_KEY=catpcha/,
+        replacement: sync(18),
+      },
+    ], { file: '.env' })
     await loading('Enabling Pages on docs', github.pages.enable(org, name))
     await git(['rm', '--cached', '.env', '.settings'])
     await git(['commit', '-am', 'ignore settings'])
