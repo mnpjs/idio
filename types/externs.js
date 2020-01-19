@@ -50,3 +50,11 @@ var WebsiteComment
  * @typedef {{ title: (string|undefined), body: (boolean|undefined), icon: (string|undefined), url: (string|undefined) }}
  */
 var PushNotification
+/**
+ * @typedef {{ comments: boolean, updates: boolean }}
+ */
+var Subscription
+/**
+ * @typedef {{ host: string, route: (string|undefined), api_key: string }}
+ */
+var AuthAppProps

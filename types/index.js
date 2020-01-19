@@ -17,7 +17,7 @@ export {}
  * @prop {boolean} prod Whether the server is running on production. This will be the case when `NODE_ENV=production`.
  * @prop {string} HOST The address of the backend host. On dev, set to `http://localhost:5000`.
  * @prop {string} STATIC The name of the static host. On dev, set to `http://localhost:5000`.
- * @prop {boolean} CLOSURE Whether testing the _Closure-compiled_ front-end build from `docs`, instead of using `frontend` middleware for development.
+ * @prop {boolean} CLOSURE Whether serving the _Closure-compiled_ front-end build from `docs`, instead of using `frontend` middleware for development. This will be true on prod, and when running the server via `closure` _package.json_ script.
  * @prop {string} [appName="{{ name }}"] The name of the app. Default `{{ name }}`.
  * @prop {!mongodb.Db} mongo An instance of the database, from `Mongo.db()`.
  * @prop {!elastic.Client} client An instance of the _ElasticSearch_ client.
@@ -57,4 +57,11 @@ export {}
  * @prop {boolean} [body] Body of the notification.
  * @prop {string} [icon] The icon to show.
  * @prop {string} [url] The URL to open on click.
+ * @typedef {Object} Subscription
+ * @prop {boolean} comments Whether subscribed to comments.
+ * @prop {boolean} updates Whether subscribed to updates.
+ * @typedef {Object} AuthAppProps
+ * @prop {string} host The host.
+ * @prop {string} [route="api"] API route. Default `api`.
+ * @prop {string} api_key API key.
  */

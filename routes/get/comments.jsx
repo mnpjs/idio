@@ -1,4 +1,4 @@
-import { Script } from '../'
+import { Script, Preact } from '../'
 
 /**
  * @type {import('../..').Middleware}
@@ -9,14 +9,15 @@ export default async (ctx) => {
   const App = (<div>
     <div id="preact-div" className="container"/>
 
-    {prod && <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.5.3/preact.umd.js"/>}
-    {(CLOSURE && !prod) && <script src="node_modules/preact/dist/preact.umd.js"/>}
-    {CLOSURE && <script>{`window.h = preact.h`}</script>}
+    <Preact prod={prod} closure={CLOSURE} />
 
-    <Script ctx={ctx} src="comments"/>
+    <Script ctx={ctx} src="client"/>
 
     <script type={CLOSURE ? undefined : 'module'}>
-      {`window.comments({ host: '${HOST}' })`}
+      {`window.Client.comments({
+        host: '${HOST}',
+        api_key: 'idio',
+      })`}
     </script>
   </div>)
 
