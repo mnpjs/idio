@@ -1,17 +1,12 @@
-import { render } from 'preact'
-import unfetch from 'unfetch'
 import CommentForm from './Form'
-import Auth from '../Auth'
+import AuthApp from '../Auth'
 import AppUser from '../Auth/AppUser'
 import List from './List'
 
-class App extends Auth {
+export default class Comments extends AuthApp {
   constructor() {
     super()
     this.list = null
-    this.state = {
-      auth: {},
-    }
   }
   get signedIn() {
     const { auth } = this.state
@@ -20,9 +15,11 @@ class App extends Auth {
   }
   getChildContext() {
     const { host } = this.props
+    const { api_key } = this.props
     return {
-      signedIn: this.signedIn,
       host,
+      api_key,
+      signedIn: this.signedIn,
       replyTo: this.state.replyTo,
       setReply: (val) => {
         if (val === null) {
@@ -35,31 +32,21 @@ class App extends Auth {
           this.setState({ replyTo: { id, name, expandResponses } })
         }
       },
-      async fetch(path, { query, ...options } = {}) {
-        if (!path) throw new Error('No path given')
-        if (query) path += App.serialize(query)
-        if (path.startsWith('/')) path = path.replace('/', '')
-        const url = /^https?:/.test(path) ? path : `${host}/api/${path}`
-        const res = await unfetch(url, options)
-        const { 'error': error, ...rest } = await res.json()
-        if (error) throw new Error(error)
-        return rest
-      },
+      fetch: this.fetch.bind(this),
     }
   }
-  render({ scope }) {
+  render({ scope, privacy, api_key }) {
     const { auth, loading, error } = this.state
 
+    if (!api_key) return (<div>Please pass the API key as api_key property.</div>)
+
     return (<div>
-      <AppUser error={error} loading={loading} auth={auth} host={this.props.host}
-        onSignOut={() => {
-          this.setState({ auth: {} })
-        }} />
+      <AppUser privacy={privacy} error={error} loading={loading} auth={auth} host={this.props.host} signOut={this.signOut.bind(this)} />
 
       <CommentForm
-        path={`${this.props.host}/api/comment`} auth={auth}
+        path={`${this.props.host}/api/${api_key}/comment`} auth={auth}
         submitFinish={async (res) => {
-          const { 'error': err, id } = await res.json()
+          const { error: err, id } = await res.json()
           if (!err && id) {
             const { replyTo: { expandResponses } = {} } = this.state
             if (expandResponses) expandResponses(id)
@@ -73,23 +60,4 @@ class App extends Auth {
 
     </div>)
   }
-  static serialize(obj) {
-    let str = []
-    for (let p in obj)
-      if (obj.hasOwnProperty(p)) {
-        const val = obj[p]
-        if (val === undefined) continue
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(val))
-      }
-    const s = str.join("&")
-    if (!s.length) return ''
-    return `?${s}`
-  }
-}
-
-window['comments'] = ({
-  'host': host = 'https://{{ name }}', 'container': container = 'preact-div',
-  'scope': scope,
-}) => {
-  render(<App host={host} scope={scope}/>, document.getElementById(container))
 }

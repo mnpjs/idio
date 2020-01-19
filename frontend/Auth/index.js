@@ -1,33 +1,64 @@
 import { Component } from 'preact'
-import unfetch from 'unfetch'
+import { fetch } from '../lib'
 
 /**
- * Fetches authorisation data from the server.
+ * An app that fetches authorisation data from the server on start.
+ * Provides the `fetch` method to load data.
  */
-export default class App extends Component {
+export default class AuthApp extends Component {
   constructor() {
     super()
 
     this.state = {
-      loading: true,
+      loading: false,
       error: null,
       /** @type {!Auth} */
       auth: {},
     }
     this.pml = /** @type {function(!Event)} */(this.postMessageListener.bind(this))
 
+    /** @type {!AuthAppProps} */
+    this.props = this.props
+
     window.addEventListener('message', this.pml, false)
   }
   componentDidMount() {
     this.auth()
   }
+  /**
+   * Load data from the server.
+   * @param {string} path
+   * @param {RequestInit} opts
+   */
+  async fetch(path, { query,
+    api_key = this.props.api_key,
+    route = this.props.route,
+    ...options
+  } = {}) {
+    const { host = '' } = this.props
+    return fetch(path, query, host, api_key, options, route)
+  }
+  async signOut() {
+    const formData = new FormData()
+    formData.append('csrf', this.state.auth.csrf)
+
+    await this.fetch('signout', {
+      route: '',
+      api_key: '',
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    })
+    this.setState({ auth: {} })
+  }
   async auth() {
     this.setState({ loading: true })
     try {
-      const res = await unfetch(`${this.props.host}/api/auth`, {
+      const auth = /** @type {Auth} */ (await this.fetch('auth', {
         credentials: 'include',
-      })
-      const auth = await res.json()
+        route: '',
+        api_key: '',
+      }))
       this.setState({ auth })
     } catch (err) {
       this.setState({ error: err.message })
@@ -40,7 +71,7 @@ export default class App extends Component {
    */
   postMessageListener(event) {
     const { data, origin } = event
-    if (origin != this.props.host) return
+    if (this.props.host && origin != this.props.host) return
     if (data == 'signedin') this.auth()
   }
   componentWillUnmount() {
@@ -51,4 +82,8 @@ export default class App extends Component {
 /**
  * @suppress {nonStandardJsDocs}
  * @typedef {import('../..').Auth} Auth
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('../..').AuthAppProps} AuthAppProps
  */

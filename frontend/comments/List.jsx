@@ -1,5 +1,6 @@
 import { Component } from 'preact'
 import './style.css'
+import Ellipsis from '../ellipsis'
 
 export default class List extends Component {
   constructor() {
@@ -58,10 +59,10 @@ export default class List extends Component {
           })
         }} />)
       })}
-      {loading && <div>Loading list...</div>}
-      {!comments.length && <div>No comments yet.</div>}
+      {loading && <div>Loading list<Ellipsis /></div>}
+      {!loading && !comments.length && <div>No comments yet.</div>}
 
-      {(!!comments.length && totalItems > comments.length) && <a onClick={(ev) => {
+      {(!loading && !!comments.length && totalItems > comments.length) && <a onClick={(ev) => {
         ev.preventDefault()
         this.fetch(undefined, comments[comments.length - 1]._id)
         return false

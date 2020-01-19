@@ -1,21 +1,22 @@
-import { Component } from 'preact'
 import { FormGroup } from '@depack/form'
-import { checkSubscribed, subscribe } from '../client'
+import Subscription from '../Subscription'
 
-export default class Subscriptions extends Component {
-  async getRegister() {
-    const { scope = '/' } = this.props
-    const register = await navigator.serviceWorker.register(`${scope}service-worker.js`, {
-      scope,
-    })
-    return register
+export default class Subscriptions extends Subscription {
+  constructor() {
+    super()
+    this.state.comments = false
+    this.state.p256dh = null
   }
   async componentDidMount() {
+    super.componentDidMount()
+    await this.check()
+  }
+  async check() {
     this.setState({ loading: true })
     try {
-      const register = await this.getRegister()
-      const { comments, p256dh } = await checkSubscribed(register, this.props.host)
-      if (comments) this.setState({ p256dh })
+      const { comments, p256dh } = await this.checkSubscribed()
+      if (comments) this.setState({ comments, p256dh })
+      else this.setState({ comments: false, p256dh: null })
     } finally {
       this.setState({ loading: false })
     }
@@ -23,45 +24,38 @@ export default class Subscriptions extends Component {
   async subscribe() {
     this.setState({ loading: true })
     try {
-      const register = await this.getRegister()
-      const { p256dh } = await subscribe(register, this.props.host)
-      this.setState({ p256dh })
+      await this._subscribe('comments')
     } finally {
       this.setState({ loading: false })
     }
+    await this.check()
   }
   async unsubscribe() {
-    const { p256dh } = this.state
-    if (!p256dh) return
     this.setState({ loading: true })
     try {
-      const { 'comments': comments } = await this.context.fetch(`unsubscribe/${p256dh}`, {
-        query: {
-          'comments': true,
-        },
-      })
-      if (comments === false) this.setState({ p256dh: undefined })
+      await this._unsubscribe('comments')
     } finally {
       this.setState({ loading: false })
     }
+    await this.check()
   }
   render({ disabled }) {
-    const { p256dh, loading } = this.state
+    const { comments, p256dh, loading } = this.state
     return <FormGroup form-row col-2 label="Subscribe" help="Receive push notifications with replies.">
       <div className="col-10">
         <div className="form-check col-4">
-          <input checked={disabled ? false : p256dh} onChange={(ev) => {
+          <input checked={disabled ? false : comments} onChange={(ev) => {
             if (!ev.currentTarget.checked) {
               const res = window.confirm('Are you sure you want so unsubscribe? You will stop receiving notifications from ALL comments on the website.')
               if (!res) return ev.currentTarget.checked = true
               this.unsubscribe()
             } else this.subscribe()
-          }} disabled={disabled} type="checkbox" className="form-check-input" id="subscribe"/>
+          }} disabled={disabled || loading} type="checkbox" className="form-check-input" id="subscribe"/>
           <label className="form-check-label" htmlFor="subscribe">
             {(!disabled && loading) && <span style="color:grey">Checking your subscriptions...</span>}
-            {(!disabled && !loading && p256dh) && <span style="color:green">You've subscribed 👍</span> }
+            {(!disabled && !loading && comments) && <span style="color:green">You've subscribed 👍</span> }
           </label>
-          <input value={p256dh} name="sub-id" type="hidden" />
+          {comments && <input value={p256dh} name="sub-id" type="hidden" />}
         </div>
       </div>
     </FormGroup>

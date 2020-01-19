@@ -1,49 +1,31 @@
 import { getUserData } from './lib'
-import unfetch from 'unfetch'
+import { Component } from 'preact'
 
-const signOut = async (host, csrf, cb) => {
-  const formData = new FormData()
-  formData.append('csrf', csrf)
+export default class User extends Component {
+  /**
+   * @param {Object} [opts]
+   * @param {!Auth} [opts.auth]
+   */
+  render({ auth, signOut }) {
+    const { linkedin_user, github_user } = auth
+    if (!linkedin_user && !github_user) return null
 
-  try {
-    const res = await unfetch(`${host}/api/signout`, {
-      method: 'POST',
-      body: formData,
-      credentials: 'include',
-    })
-    const { error } = await res.json()
-    if (error) cb(error)
-    else cb()
-  } catch (err) {
-    cb(err.message)
+    const { picture, name } = getUserData(auth)
+
+    return (<div>
+      <img src={picture} width="50"/>
+      {' '}Hello, {name}!{' '}
+      <a href="#" onClick={(e) => {
+        e.preventDefault()
+        signOut()
+          .catch((err) => {
+            alert(`Could not sign out: ${err.message}. Please refresh the page and try again. Alternatively, clear your cookies.`)
+          })
+        return false
+      }}>Sign Out</a>
+    </div>)
   }
 }
-
-/**
- * @param {Object} opts
- * @param {Auth} opts.auth
- */
-const User = ( { auth, onSignout = () => {}, host }) => {
-  const { linkedin_user, github_user, csrf } = auth
-  if (!linkedin_user && !github_user) return null
-
-  const { picture, name } = getUserData(auth)
-
-  return (<div>
-    <img src={picture} width="50"/>
-    Hello, {name}!{' '}
-    <a href="#" onClick={(e) => {
-      e.preventDefault()
-      signOut(host, csrf, (err) => {
-        if (err) alert(`Could not sign out: ${err}. Please refresh the page and try again. Alternatively, clear your cookies.`)
-        else onSignout()
-      })
-      return false
-    }}>Sign Out</a>
-  </div>)
-}
-
-export default User
 
 /**
  * @suppress {nonStandardJsDocs}
