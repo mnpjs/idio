@@ -14,6 +14,5 @@ export default (ctx) => {
 }
 
 /**
- * @suppress {nonStandardJsDocs}
  * @typedef {import('../../').Auth} Auth
  */
