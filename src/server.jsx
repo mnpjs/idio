@@ -88,7 +88,7 @@ export default async function Server({
     ...model(Mongo),
     prod: PROD,
     HOST: PROD ? HOST : url,
-    STATIC: PROD ? '{{ static }}' : url,
+    STATIC: PROD ? 'https://{{ static }}' : url,
     CLOSURE: PROD || CLOSURE,
     client, appName,
     render: (vnode, props = {}, Layout = DefaultLayout) => {
