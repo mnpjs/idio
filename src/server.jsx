@@ -3,6 +3,7 @@ import { sync } from 'uid-safe'
 import initRoutes, { watchRoutes } from '@idio/router'
 import linkedIn, { getUser } from '@idio/linkedin'
 import logarithm from 'logarithm'
+import model from './model'
 import DefaultLayout from '../layout'
 
 const {
@@ -16,6 +17,8 @@ const PROD = NODE_ENV == 'production'
 
 /**
  * Starts the server.
+ * @param {Object} p
+ * @param {import('mongodb').MongoClient} p.Mongo
  */
 export default async function Server({
   client, port, client_id, client_secret, appName,
@@ -76,9 +79,8 @@ export default async function Server({
     csrfCheck: {},
     jsonErrors: {},
   }, { port })
-
   Object.assign(app.context, {
-    mongo: Mongo.db(),
+    ...model(Mongo),
     prod: PROD,
     HOST: PROD ? HOST : url,
     STATIC: PROD ? '{{ static }}' : url,

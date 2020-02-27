@@ -1,0 +1,17 @@
+<types ns="IDIO_NAMESPACE">
+  <import from="mongodb" name="Collection"/>
+  <record name="Database">
+    <prop type="!mongodb.Collection" name="Subscriptions">
+      `Subscriptions` collection.
+    </prop>
+    <prop type="!mongodb.Collection" name="Comments">
+      `Comments` collection.
+    </prop>
+    <prop type="!mongodb.Collection" name="Emails">
+      `Emails` collection.
+    </prop>
+    <prop type="!mongodb.Collection" name="Vapid">
+      `Vapid` collection.
+    </prop>
+  </record>
+</types>

@@ -1,5 +1,5 @@
-<types>
-  <import from="@idio/github" ns="_idio" name="GithubUser"/>
+<types ns="IDIO_NAMESPACE">
+  <import from="@idio/idio/types/options" ns="_idio" name="GithubUser"/>
   <import from="@typedefs/goa" ns="_goa" name="Middleware"/>
 
   <type record name="LinkedInUser">
@@ -26,7 +26,10 @@
 
   <type name="WebsiteComment">
     <prop string name="_id" opt>id.</prop>
-    <prop boolean name="isAuthor" opt>Whether the current session user wrote this comment.</prop>
+    <prop string name="api_key" opt>User ID.</prop>
+    <prop boolean name="isAuthor" opt>
+      Whether the current session user wrote this comment.
+    </prop>
     <prop string name="country" opt>The country name.</prop>
     <prop string name="ip" opt>The IP address.</prop>
     <prop string name="name" opt>The display name.</prop>
@@ -48,10 +51,7 @@
     <prop string name="icon" opt>The icon to show.</prop>
     <prop string name="url" opt>The URL to open on click.</prop>
   </type>
-  <type name="Subscription">
-    <prop boolean name="comments">Whether subscribed to comments.</prop>
-    <prop boolean name="updates">Whether subscribed to updates.</prop>
-  </type>
+
   <type name="AuthAppProps">
     <prop string name="host">The host.</prop>
     <prop string name="route" default="api">API route.</prop>

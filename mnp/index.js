@@ -1,3 +1,5 @@
+import hostname from './hostname'
+
 /**
  * @type {Template}
  */
@@ -11,18 +13,10 @@ const config = {
     title: {
       text: 'Website Title',
     },
-    hostname: {
-      text: 'Hostname',
-      getDefault ({ name }) {
-        return name
-      },
-      alias: 'https://mnpjs.github.io/idio/',
-      afterQuestions(_, hostname) {
-        return {
-          hostname,
-          url: hostname,
-        }
-      },
+    hostname,
+    namespace: {
+      text: 'Namespace',
+      alias: 'IDIO_NAMESPACE',
     },
     frontend: {
       text: 'Frontend',

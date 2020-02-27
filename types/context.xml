@@ -1,9 +1,13 @@
-<types>
+<types ns="IDIO_NAMESPACE">
   <import from="mongodb" name="Db"/>
   <import name="Context" from="@idio/idio" ns="_idio" />
   <import from="@elastic/elasticsearch" ns="elastic" name="Client"/>
 
   <record name="Context" extends="_idio.Context">
+    <prop name="db" type="IDIO_NAMESPACE.Database">
+      Database models handle.
+    </prop>
+
     <prop boolean name="prod">
       Whether the server is running on production. This will be the case when `NODE_ENV=production`.
     </prop>
