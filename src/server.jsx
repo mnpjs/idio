@@ -1,12 +1,8 @@
-import idio, { Router } from '@idio/idio'
+import idio, { Router, render } from '@idio/idio'
 import { sync } from 'uid-safe'
-import render from '@depack/render'
 import initRoutes, { watchRoutes } from '@idio/router'
-import linkedIn from '@idio/linkedin'
-import github from '@idio/github'
-import { getUser } from '@idio/linkedin'
+import linkedIn, { getUser } from '@idio/linkedin'
 import logarithm from 'logarithm'
-import cleanStack from '@artdeco/clean-stack'
 import DefaultLayout from '../layout'
 
 const {
@@ -56,24 +52,29 @@ export default async function Server({
         }
       },
     },
-    csrfCheck: {},
-    async jsonErrors(ctx, next) {
-      try {
-        await next()
-      } catch (err) {
-        if (err.statusCode && err.statusCode >= 400 && err.statusCode <= 500) {
-          err.message = err.message.replace(/^([^!])/, '!$1')
+    github: {
+      client_id: github_id,
+      client_secret: github_secret,
+      path: '/github',
+      error(ctx, error, desc) {
+        console.log('Github error %s %s', error, desc)
+        ctx.redirect(`/callback?error=${error}`)
+      },
+      async finish(ctx, token, scope, user) {
+        ctx.session.github_token = token
+        ctx.session.github_user = {
+          login: user.login,
+          name: user.name,
+          avatar_url: user.avatar_url,
+          html_url: user.html_url,
         }
-        if (err.message.startsWith('!')) {
-          ctx.body = { error: err.message.replace('!', '') }
-          console.log(err.message)
-        } else {
-          ctx.body = { error: 'internal server error' }
-          err.stack = cleanStack(err.stack)
-          app.emit('error', err)
-        }
-      }
+        if (!ctx.session.csrf) ctx.session.csrf = sync(18)
+        await ctx.session.manuallyCommit()
+        ctx.redirect('/callback')
+      },
     },
+    csrfCheck: {},
+    jsonErrors: {},
   }, { port })
 
   Object.assign(app.context, {
@@ -95,14 +96,11 @@ export default async function Server({
 
   if (CLOSURE)
     console.log('Testing Closure bundle: %s', 'docs/comments.js')
-  const li = {
+  linkedIn(router, {
     session: middleware.session,
     client_id,
     client_secret,
     scope: 'r_liteprofile',
-  }
-  linkedIn(router, {
-    ...li,
     error(ctx, error) {
       console.log('Linkedin error %s', error)
       ctx.redirect(`/callback?error=${error}`)
@@ -112,29 +110,6 @@ export default async function Server({
       ctx.session.linkedin_token = token
       ctx.session.linkedin_user = getUser(user)
       if (!ctx.session.csrf) ctx.session.csrf = sync(18)
-      ctx.redirect('/callback')
-    },
-  })
-  github(app, {
-    session: middleware.session,
-    client_id: github_id,
-    client_secret: github_secret,
-    path: '/github',
-    error(ctx, error, desc) {
-      console.log('Github error %s %s', error, desc)
-      ctx.redirect(`/callback?error=${error}`)
-    },
-    async finish(ctx, token, scope, user) {
-      ctx.session.github_token = token
-      ctx.session.github_user = {
-        login: user.login,
-        name: user.name,
-        avatar_url: user.avatar_url,
-        html_url: user.html_url,
-      }
-
-      if (!ctx.session.csrf) ctx.session.csrf = sync(18)
-      await ctx.session.manuallyCommit()
       ctx.redirect('/callback')
     },
   })

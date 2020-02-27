@@ -1,17 +1,16 @@
-import { connect } from 'mongodb'
 import { Client } from '@elastic/elasticsearch'
 import { c } from 'erte'
 import webpush from 'web-push'
+import { connectMongo } from './lib'
 import Server from './server'
 
 const {
-  ELASTIC: elastic, MONGO_URL: mongo,
+  ELASTIC: elastic, MONGO_URL,
   PUBLIC_VAPID: public_vapid, PRIVATE_VAPID: private_vapid,
-
 } = process.env
 
 if (!elastic) throw new Error('Expecting ELASTIC env variable')
-if (!mongo) throw new Error('Expecting MONGO_URL env variable')
+if (!MONGO_URL) throw new Error('Expecting MONGO_URL env variable')
 if (!private_vapid) throw new Error('Expecting PRIVATE_VAPID env variable')
 if (!public_vapid) throw new Error('Expecting PUBLIC_VAPID env variable')
 
@@ -24,11 +23,7 @@ webpush.setVapidDetails('https://{{ name }}', public_vapid, private_vapid)
 ;(async () => {
   try {
     const [Mongo] = await Promise.all([
-      connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then((m) => {
-          console.log('Connected to %s', c(mongo.replace(/.+@(.+)/, 'mongodb://$1'), 'yellow'))
-          return m
-        }),
+      connectMongo(MONGO_URL),
       client.ping().then(() => {
         console.log('Connected to %s', c(elastic, 'red'))
       }),
