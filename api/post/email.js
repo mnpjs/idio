@@ -35,7 +35,7 @@ export default async (ctx) => {
   }
 
   /**
-   * @type {_akashic.Email}
+   * @type {IDIO_NAMESAPCE.Email}
    */
   const newEmail = {
     email,
@@ -58,6 +58,5 @@ export const aliases = ['/email/:project']
 export const middleware = ['forms', 'csrfCheck']
 
 /**
- * @typedef {import('../../').Auth} Auth
- * @typedef {import('../../').Email} _akashic.Email
+ * @typedef {import('../../').Email} IDIO_NAMESAPCE.Email
  */

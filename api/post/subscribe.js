@@ -45,7 +45,7 @@ export default async (ctx) => {
 
   if (statusCode != 201) throw new Error('!Invalid web-push status code.')
 
-  /** @type {_akashic.Subscription} */
+  /** @type {IDIO_NAMESAPCE.Subscription} */
   const subscription = {
     api_key,
     auth,
@@ -63,7 +63,7 @@ export default async (ctx) => {
     scope,
   }, { $set: subscription }, { upsert: true })
 
-  /** @type {_akashic.Subscription} */
+  /** @type {IDIO_NAMESAPCE.Subscription} */
   const sub = { comments, updates }
   ctx.body = sub
 }
@@ -73,5 +73,5 @@ export const middleware = ['forms']
 
 /**
  * @typedef {import('../../').Auth} Auth
- * @typedef {import('../../').Subscription} _akashic.Subscription
+ * @typedef {import('../../').Subscription} IDIO_NAMESAPCE.Subscription
  */
