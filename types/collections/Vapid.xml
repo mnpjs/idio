@@ -1,0 +1,17 @@
+<types ns="IDIO_NAMESPACE">
+  <record name="Vapid" desc="Recorded VAPID keys to send push-notifications.">
+    <prop string name="api_key">Client ID for which VAPID keys were added.</prop>
+    <prop string name="origin">
+      The origin on which the keys can be used.
+    </prop>
+    <prop string name="scope" default="/">
+      The scope, e.g., `/scope`.
+    </prop>
+    <prop string name="public_vapid">
+      The public VAPID key.
+    </prop>
+    <prop string name="private_vapid">
+      The private VAPID key.
+    </prop>
+  </record>
+</types>

@@ -1,0 +1,24 @@
+<types ns="IDIO_NAMESPACE">
+  <record name="Email" desc="An email left for subscription.">
+    <prop string name="origin">
+      The origin where the email was collected from.
+    </prop>
+    <prop string name="api_key">
+      The client ID for which the email was left.
+    </prop>
+    <prop string name="project">
+      The project name. If not set, it will be equal to the referer, i.e., different pages might have different subscriptions.
+    </prop>
+    <prop string name="referer">
+      The page from which the email was collected.
+    </prop>
+    <prop string name="email">The email address.</prop>
+    <prop type="!Date" name="date">The date when email was submitted.</prop>
+    <prop string name="github_login" opt>
+      If user logged in on _GitHub_, this is her login.
+    </prop>
+    <prop string name="linkedin_id" opt>
+      If user logged in on _LinkedIn_, this is her app-specific ID.
+    </prop>
+  </record>
+</types>

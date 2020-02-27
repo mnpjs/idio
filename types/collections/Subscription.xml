@@ -1,0 +1,25 @@
+<types ns="IDIO_NAMESPACE">
+  <record name="Subscription" desc="A record indicating a user subscription.">
+    <prop string name="api_key">Client ID for which the subscription was created.</prop>
+    <prop boolean name="comments">Whether subscribed to comments.</prop>
+    <prop boolean name="updates">Whether subscribed to updates.</prop>
+    <prop string name="origin">
+      The origin for the subscription (e.g., `akashic.page`).
+    </prop>
+    <prop string name="scope" default="/">
+      The scope, e.g., `/scope`.
+    </prop>
+    <prop string name="p256dh">
+      A [push subscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription/getKey) public encryption key.
+    </prop>
+    <prop string name="auth">
+      A [push subscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription/getKey) authentication key.
+    </prop>
+    <prop string name="endpoint">
+      The address of where to send notifications, e.g., `https://fcm.googleapis.com/fcm/send/dDGVev8Tq0c:APA91...`.
+    </prop>
+    <prop type="!Date" name="date">
+      When the subscription was added or updated.
+    </prop>
+  </record>
+</types>

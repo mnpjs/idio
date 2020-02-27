@@ -68,102 +68,100 @@ IDIO_NAMESPACE.AuthAppProps
 LinkedInUser.prototype.email
 
 /* typal types/collections/Subscription.xml externs */
-/** @const */
-var _akashic = {}
 /**
  * A record indicating a user subscription.
  * @record
  */
-_akashic.Subscription
+IDIO_NAMESPACE.Subscription
 /**
  * Client ID for which the subscription was created.
  * @type {string}
  */
-_akashic.Subscription.prototype.api_key
+IDIO_NAMESPACE.Subscription.prototype.api_key
 /**
  * Whether subscribed to comments.
  * @type {boolean}
  */
-_akashic.Subscription.prototype.comments
+IDIO_NAMESPACE.Subscription.prototype.comments
 /**
  * Whether subscribed to updates.
  * @type {boolean}
  */
-_akashic.Subscription.prototype.updates
+IDIO_NAMESPACE.Subscription.prototype.updates
 /**
  * The origin for the subscription (e.g., `akashic.page`).
  * @type {string}
  */
-_akashic.Subscription.prototype.origin
+IDIO_NAMESPACE.Subscription.prototype.origin
 /**
  * The scope, e.g., `/scope`. Default `/`.
  * @type {string|undefined}
  */
-_akashic.Subscription.prototype.scope
+IDIO_NAMESPACE.Subscription.prototype.scope
 /**
  * A [push subscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription/getKey) public encryption key.
  * @type {string}
  */
-_akashic.Subscription.prototype.p256dh
+IDIO_NAMESPACE.Subscription.prototype.p256dh
 /**
  * A [push subscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription/getKey) authentication key.
  * @type {string}
  */
-_akashic.Subscription.prototype.auth
+IDIO_NAMESPACE.Subscription.prototype.auth
 /**
  * The address of where to send notifications, e.g., `https://fcm.googleapis.com/fcm/send/dDGVev8Tq0c:APA91...`.
  * @type {string}
  */
-_akashic.Subscription.prototype.endpoint
+IDIO_NAMESPACE.Subscription.prototype.endpoint
 /**
  * When the subscription was added or updated.
  * @type {!Date}
  */
-_akashic.Subscription.prototype.date
+IDIO_NAMESPACE.Subscription.prototype.date
 
 /* typal types/collections/Email.xml externs */
 /**
  * An email left for subscription.
  * @record
  */
-_akashic.Email
+IDIO_NAMESPACE.Email
 /**
  * The origin where the email was collected from.
  * @type {string}
  */
-_akashic.Email.prototype.origin
+IDIO_NAMESPACE.Email.prototype.origin
 /**
  * The client ID for which the email was left.
  * @type {string}
  */
-_akashic.Email.prototype.api_key
+IDIO_NAMESPACE.Email.prototype.api_key
 /**
  * The project name. If not set, it will be equal to the referer, i.e., different pages might have different subscriptions.
  * @type {string}
  */
-_akashic.Email.prototype.project
+IDIO_NAMESPACE.Email.prototype.project
 /**
  * The page from which the email was collected.
  * @type {string}
  */
-_akashic.Email.prototype.referer
+IDIO_NAMESPACE.Email.prototype.referer
 /**
  * The email address.
  * @type {string}
  */
-_akashic.Email.prototype.email
+IDIO_NAMESPACE.Email.prototype.email
 /**
  * The date when email was submitted.
  * @type {!Date}
  */
-_akashic.Email.prototype.date
+IDIO_NAMESPACE.Email.prototype.date
 /**
  * If user logged in on _GitHub_, this is her login.
  * @type {string|undefined}
  */
-_akashic.Email.prototype.github_login
+IDIO_NAMESPACE.Email.prototype.github_login
 /**
  * If user logged in on _LinkedIn_, this is her app-specific ID.
  * @type {string|undefined}
  */
-_akashic.Email.prototype.linkedin_id
+IDIO_NAMESPACE.Email.prototype.linkedin_id
