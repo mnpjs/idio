@@ -1,20 +1,18 @@
 import { ObjectID } from 'mongodb'
-import { parse } from 'url'
 
-/** @type {import('../../').Middleware} */
+/**
+ * Returns the list of comments.
+ * @type {import('../../').ApiMiddleware}
+ */
 export default async (ctx) => {
   const { csrf, linkedin_user, github_user } = ctx.session
 
   const { page = 1, id, 'reply-to': replyTo = null,
     'last-comment-id': lastCommentId,
   } = ctx.request.query
-  const { referer } = ctx.request.header
-  if (!referer) return ctx.status = 404
-  const { path } = parse(referer)
 
+  const { refererPath, db: { Comments } } = ctx
   const skip = (page - 1) * 20
-
-  const Comments = ctx.mongo.collection('comments')
 
   let lastId
   if (lastCommentId) lastId = ObjectID(lastCommentId)
@@ -22,7 +20,7 @@ export default async (ctx) => {
   const filter = {
     replyTo,
     removed: null,
-    path,
+    path: refererPath,
     ...(lastId ? { _id: {
       $lt: lastId,
     } } : {}),
@@ -57,6 +55,5 @@ export default async (ctx) => {
 }
 
 /**
- * @suppress {nonStandardJsDocs}
  * @typedef {import('../../').Auth} Auth
  */

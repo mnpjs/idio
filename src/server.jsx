@@ -4,6 +4,7 @@ import initRoutes, { watchRoutes } from '@idio/router'
 import linkedIn, { getUser } from '@idio/linkedin'
 import logarithm from 'logarithm'
 import model from './model'
+import makeApiRouter from '../api'
 import DefaultLayout from '../layout'
 
 const {
@@ -12,6 +13,7 @@ const {
   FRONT_END = 'https://{{ frontend }}',
   CLOSURE, // for /comments page
   SESSION_KEY,
+  GITHUB_ADMIN,
 } = process.env
 const PROD = NODE_ENV == 'production'
 
@@ -65,6 +67,9 @@ export default async function Server({
       },
       async finish(ctx, token, scope, user) {
         ctx.session.github_token = token
+        if (user.login == GITHUB_ADMIN) {
+          ctx.session.admin = true
+        }
         ctx.session.github_user = {
           login: user.login,
           name: user.name,
@@ -115,20 +120,27 @@ export default async function Server({
       ctx.redirect('/callback')
     },
   })
+  // MAIN ROUTES
   const w = await initRoutes(router, 'routes', {
     middleware,
   })
-  const apiRouter = new Router()
-  const w2 = await initRoutes(apiRouter, 'api', {
+  // API ROUTES
+  const { watchConfig: w2 } = await makeApiRouter(middleware, router, 'api')
+
+  // ADMIN ROUTES
+  const adminRouter = new Router()
+  const w3 = await initRoutes(adminRouter, 'admin', {
     middleware,
   })
-  if (watch) {
-    watchRoutes(w)
-    watchRoutes(w2)
-  }
-  router.use('/api',
-    middleware.cors, middleware.session, middleware.jsonErrors,
-    apiRouter.routes()
+
+  if (watch) [w, w2, w3].forEach(watchRoutes)
+
+  router.use('/admin',
+    middleware.cors, middleware.session, middleware.jsonErrors, (ctx, next) => {
+      if (!ctx.session.admin) ctx.throw(403)
+      return next()
+    },
+    adminRouter.routes()
   )
   app.use(router.routes())
   // app.use(ctx => ctx.redirect(FRONT_END))

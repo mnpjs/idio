@@ -2,13 +2,13 @@ import { ObjectID } from 'mongodb'
 
 /**
  * Removes a comment from the database.
- * @type {import('../../').Middleware}
+ * @type {import('../../').ApiMiddleware}
  */
 export default async (ctx) => {
   const { linkedin_user, github_user } = ctx.session
   const { id } = ctx.params
+  const { db: { Comments } } = ctx
 
-  const Comments = ctx.mongo.collection('comments')
   const oid = new ObjectID(id)
   const f = await Comments.findOneAndUpdate({
     _id: oid,
@@ -36,7 +36,7 @@ export default async (ctx) => {
   ctx.body = { ok: f.ok }
 }
 
-export const aliases = ['/remove-comment/:id']
+export const route = '/remove-comment/:id'
 export const middleware = ['csrfCheck']
 
 /**

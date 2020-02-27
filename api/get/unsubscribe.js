@@ -1,25 +1,25 @@
 /**
  * Removes comments' subscription.
- * @type {import('../../').Middleware}
+ * @type {import('../../').ApiMiddleware}
  */
 export default async (ctx) => {
-  const { query: { comments, lambda }, mongo } = ctx
-  const { p256dh } = ctx.params
+  const { db: { Subscriptions }, refererHost } = ctx
+  const { p256dh, method } = ctx.params
 
-  if (comments) {
-    const subscriptions = mongo.collection('Subscriptions')
-    const res = await subscriptions.updateOne({ p256dh }, { $set: {
-      comments: false,
-    } })
-    ctx.body = { comments: false }
-    return
-  } else if (lambda) {
-    const subscriptions = mongo.collection('LambdaSubscriptions')
-    const res = await subscriptions.deleteOne({ p256dh })
-    ctx.body = { comments: false }
-    return
-  }
-  ctx.body = {}
+  let comments, updates
+  if (method == 'comments') comments = false
+  else if (method == 'updates') updates = false
+
+  const res = await Subscriptions.updateOne({
+    p256dh,
+    origin: refererHost,
+  }, { $set: {
+    ...(comments !== undefined ? { comments } : {}),
+    ...(updates !== undefined ? { updates } : {}),
+  } })
+  if (res.modifiedCount)
+    ctx.body = { comments, updates }
+  else ctx.body = {}
 }
 
-export const aliases = ['/unsubscribe/:p256dh']
+export const route = '/unsubscribe/:p256dh/:method'

@@ -1,8 +1,8 @@
-import { parse } from 'url'
 import { createHash } from 'crypto'
 import { ObjectID } from 'mongodb'
 import webpush from 'web-push'
 import countries from '../../frontend/countries'
+import { findKeys } from '../get/vapid'
 
 const countriesMap = countries.reduce((acc, { name, code }) => {
   acc[code] = name
@@ -28,15 +28,16 @@ const validateCountry = (countryCode) => {
   return country
 }
 
-/** @type {import('../..').Middleware} */
+/** @type {import('../..').ApiMiddleware} */
 export default async (ctx) => {
   // debugger
   let { photo, csrf, name, country_code, comment, 'hide-github': hideGithub,
     'captcha-answer': captchaAnswer, captcha, 'sub-id': subId, 'reply-to': replyTo = null,
   } = ctx.request.body
-  const { request: { header: { referer }, ip } } = ctx
-  if (!referer) throw new Error('!Request came from an unknown page.')
-  const { path } = parse(referer)
+  const { request: { header: { referer }, ip }, refererPath, db: {
+    Comments,
+  } } = ctx
+  const { api_key } = ctx.params
 
   let linkedin_user, github_user
   if (csrf) {
@@ -53,8 +54,6 @@ export default async (ctx) => {
   }
   validatePhoto(photo, ctx.session)
   const country = validateCountry(country_code)
-
-  const Comments = ctx.mongo.collection('comments')
 
   if (!comment) throw new Error('!Comment is a required field.')
 
@@ -91,6 +90,7 @@ export default async (ctx) => {
    * @type {import('../..').WebsiteComment}
    */
   const c = {
+    api_key,
     linkedin_user,
     github_user,
     name,
@@ -100,7 +100,7 @@ export default async (ctx) => {
     ...(guest ? { ip } : {}),
     ...(country ? { country } : {}),
     date: new Date(),
-    path,
+    path: refererPath,
     subId,
     replyTo,
   }
@@ -125,7 +125,7 @@ export default async (ctx) => {
       url: referer,
     }
     sendPush(ctx, subId, payload).catch(err => {
-      ctx.onerror(err)
+      ctx.app.onerror(err)
     })
   }
 }
@@ -136,13 +136,20 @@ const sendPush = async (ctx, id, payload) => {
     p256dh: id,
   })
   if (sub) {
+    const { public_vapid, private_vapid, origin } = await findKeys(ctx)
+
     const { auth, p256dh, endpoint } = sub
     const { statusCode } = await webpush.sendNotification({
       endpoint, keys: { auth, p256dh },
-    }, JSON.stringify(payload))
-    if (statusCode != 201) {
+    }, JSON.stringify(payload), {
+      vapidDetails: {
+        subject: `https://${origin}`,
+        privateKey: private_vapid,
+        publicKey: public_vapid,
+      },
+    })
+    if (statusCode != 201)
       throw new Error('Invalid webpush status code.')
-    }
   }
 }
 
@@ -162,7 +169,6 @@ const validatePhoto = (photo, { linkedin_user, github_user }) => {
 }
 
 /**
- * @suppress {nonStandardJsDocs}
  * @typedef {import('../../').Auth} Auth
  */
 
