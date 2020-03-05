@@ -40,7 +40,7 @@
   "dependencies": {
     "@depack/form": "^1.4.2",
     "@elastic/elasticsearch": "^7.6.0",
-    "@idio/idio": "^1.5.1",
+    "@idio/idio": "^1.6.0",
     "@idio/linkedin": "1.4.0",
     "@idio/router": "^1.4.2",
     "@lemuria/popup": "^1.1.1",
@@ -48,7 +48,7 @@
     "@svag/window": "1.1.1",
     "catchment": "3.3.0",
     "erte": "1.2.0",
-    "logarithm": "^2.2.0",
+    "logarithm": "^2.3.1",
     "mongodb": "^3.5.4",
     "svg-captcha": "^1.4.0",
     "uid-safe": "2.1.5",

@@ -77,10 +77,10 @@
   resolved "https://registry.yarnpkg.com/@externs/preact/-/preact-1.3.1.tgz#d97745283c30834b569399be0d85286ab7f02d80"
   integrity sha512-B6QUjtgqPCzKWpLdZ8YCCPQv2/iECNJ/JBHVy76cWWN/JPOP+HhOGxWRiEo5f1xg0A1ouf0Ca4cLfqX34W+rbQ==
 
-"@idio/idio@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@idio/idio/-/idio-1.5.1.tgz#86ad2bdeb15b0bf54ce6fa1af9572a03f14f4924"
-  integrity sha512-cZ+mOTlad79oMagTiWK8BAQm2KT7q+UohwhFxvKoJClNEP/Fc1L0mo5olmblcXMXJ75RjulsikNLI+QyST64Zg==
+"@idio/idio@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@idio/idio/-/idio-1.6.0.tgz#aa748d4684f6cf672c0fec67ecfe226f69c8e643"
+  integrity sha512-iw9maRPfWiIegmaI7PDAQn1G+qhQeLmyNv/l7XWUAwvknWh/chmHBedBe1xJ9pCMOzhNvhkZa7fkXo9iL8KQ0Q==
   dependencies:
     mime-db "^1.43.0"
     text-decoding "^1.0.0"
@@ -447,10 +447,10 @@ jws@^3.1.3:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
 
-logarithm@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/logarithm/-/logarithm-2.2.0.tgz#c4b0e362da98ff0cd35e16993cd20ebf82751e5c"
-  integrity sha512-mhjIpmc4JgGOY6JhloV0O7bVEnecsFpClr+HDHeDymoy3J0TArK54MJ+W+r//avRP1AHhpMb17KAIB8IKI7hNQ==
+logarithm@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/logarithm/-/logarithm-2.3.1.tgz#4603a9f538eb7bb43f724bf152450171e3a128d8"
+  integrity sha512-U3YwVDmsbT7yXgsH1isiAyMIzuFo8Q3tKuB/QJlRW3rjyor7DGIguHDPyUkSgsBJ+k+sv/u4TsiPP6U5/jZvIw==
 
 makepromise@^3.0.3, makepromise@^3.1.0:
   version "3.1.0"

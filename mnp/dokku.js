@@ -25,13 +25,13 @@ export const dokkuPreUpdate = async ({ dokku, name }, { resolve, warn }) => {
   if (code) throw new Error(e)
 
   // letsencrypt
-  ;({ stdout, stderr, promise } = fork(p, ['letsencrypt', ...args], {
-    silent: true,
-    execArgv: [],
-  }))
-  stdout.pipe(process.stdout)
-  stderr.pipe(process.stderr)
-  const { stderr: e1, code: code1 } = await promise
-  if (code1) throw new Error(e1)
+  // ;({ stdout, stderr, promise } = fork(p, ['letsencrypt', ...args], {
+  //   silent: true,
+  //   execArgv: [],
+  // }))
+  // stdout.pipe(process.stdout)
+  // stderr.pipe(process.stderr)
+  // const { stderr: e1, code: code1 } = await promise
+  // if (code1) throw new Error(e1)
   await promise
 }

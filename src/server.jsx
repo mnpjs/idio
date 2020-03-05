@@ -2,7 +2,6 @@ import idio, { Router, render } from '@idio/idio'
 import { sync } from 'uid-safe'
 import initRoutes, { watchRoutes } from '@idio/router'
 import linkedIn, { getUser } from '@idio/linkedin'
-import logarithm from 'logarithm'
 import model from './model'
 import makeApiRouter from '../api'
 import DefaultLayout from '../layout'
@@ -27,25 +26,13 @@ export default async function Server({
   watch = !PROD, elastic, Mongo, github_id, github_secret,
 }) {
   const { app, url, middleware, router } = await idio({
+    logarithm: { app, url: elastic, use: true },
+    compress: true,
     cors: {
-      use: true,
       origin: PROD && [FRONT_END, HOST, 'http://localhost:3000'],
       credentials: true,
     },
-    compress: { use: true },
-    logarithm: {
-      middlewareConstructor() {
-        const l = logarithm({
-          app: appName,
-          url: elastic,
-        })
-        return l
-      },
-      use: true,
-    },
-    form: {
-      dest: 'upload',
-    },
+    form: { dest: 'upload' },
     frontend: { use: !PROD },
     static: { use: PROD || CLOSURE, root: 'docs' },
     session: { keys: [SESSION_KEY] },
