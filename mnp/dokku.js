@@ -1,11 +1,11 @@
 export default {
   text: 'Dokku Host (type - for no host)',
   getDefault({ name }) {
-    return name
+    return `dokku@${name}`
   },
-  async afterQuestions({ git }, dokku, { name }) {
+  async afterQuestions({ git }, host, { name }) {
     if (name == '-') return null
-    await git('remote', 'add', 'dokku', `dokku@${dokku}:${name}`)
+    await git('remote', 'add', 'dokku', `${host}:${name}`)
   },
 }
 
