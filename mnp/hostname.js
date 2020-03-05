@@ -1,10 +1,10 @@
 export default {
   text: 'Hostname',
-  getDefault ({ name }) {
+  getDefault({ name }) {
     return name
   },
   alias: 'https://mnpjs.github.io/idio/',
-  afterQuestions({ name }, hostname) {
+  afterQuestions(_, hostname, { name }) {
     return {
       hostname,
       url: hostname,

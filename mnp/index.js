@@ -1,4 +1,6 @@
 import hostname from './hostname'
+import Static from './static'
+import dokku, { dokkuPreUpdate } from './dokku'
 
 /**
  * @type {Template}
@@ -20,34 +22,16 @@ const config = {
     },
     frontend: {
       text: 'Frontend',
-      getDefault ({ name }) {
+      getDefault({ name }) {
         return name
       },
     },
-    static: {
-      text: 'Static Hostname',
-      getDefault ({ name, org }) {
-        return `${org}.github.io/${name}`
-      },
-      afterQuestions({ org, name, writeFileSync }, staticHost) {
-        const def = `${org}.github.io/${name}`
-        if (def != staticHost) {
-          writeFileSync('docs/CNAME', staticHost)
-        }
-      },
-    },
-    dokku: {
-      text: 'Dokku Host (type - for no host)',
-      getDefault ({ name }) {
-        return name
-      },
-      async afterQuestions({ git }, dokku, { name }) {
-        if (name == '-') return null
-        await git('remote', 'add', 'dokku', `dokku@${dokku}:${name}`)
-      },
-    },
+    static: Static,
+    dokku,
   },
-  async afterInit({ org, name }, { git, loading, github, initManager, updateFiles }) {
+  async afterInit(settings, api) {
+    const { org, name, dokku: d } = settings
+    const { git, loading, github, initManager, updateFiles, warn } = api
     await initManager()
     const { generateVAPIDKeys } = require('web-push')
     const { sync } = require('uid-safe')
@@ -68,6 +52,14 @@ const config = {
       },
     ], { file: '.env' })
     await loading('Enabling Pages on docs', github.pages.enable(org, name))
+    if (d) {
+      try {
+        await dokkuPreUpdate(settings, api)
+      } catch (err) {
+        warn(err.stack)
+      }
+    }
+    // await loading('Running Dokku commands', dokkuPreUpdate)
     await git(['rm', '--cached', '.env', '.settings'])
     await git(['commit', '-am', 'ignore settings'])
   },
