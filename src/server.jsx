@@ -26,6 +26,10 @@ export default async function Server({
   watch = !PROD, elastic, Mongo, github_id, github_secret,
 }) {
   const { app, url, middleware, router } = await idio({
+    frontend: {
+      use: !PROD,
+      hotReload: true,
+    },
     logarithm: { app, url: elastic, use: true },
     compress: true,
     cors: {
@@ -33,7 +37,6 @@ export default async function Server({
       credentials: true,
     },
     form: { dest: 'upload' },
-    frontend: { use: !PROD },
     static: { use: PROD || CLOSURE, root: 'docs' },
     session: { keys: [SESSION_KEY] },
     forms: {
@@ -70,16 +73,28 @@ export default async function Server({
     },
     csrfCheck: {},
     jsonErrors: {},
+    adminCheck: {
+      middlewareConstructor() {
+        return (ctx, next) => {
+          // testing
+          if (!PROD) return next()
+          const { session: { admin } = {} } = ctx
+          if (!admin) ctx.throw(403)
+          return next()
+        }
+      },
+    },
   }, { port })
+  const db = model(Mongo)
   Object.assign(app.context, {
-    ...model(Mongo),
+    ...db,
     prod: PROD,
     HOST: PROD ? HOST : url,
     STATIC: PROD ? 'https://{{ static }}' : url,
     CLOSURE: PROD || CLOSURE,
     client, appName,
     render: (vnode, props = {}, Layout = DefaultLayout) => {
-      return render(<Layout {...props}>
+      return render(<Layout prod={PROD} {...props}>
         {vnode}
       </Layout>, {
         addDoctype: true,
@@ -123,10 +138,7 @@ export default async function Server({
   if (watch) [w, w2, w3].forEach(watchRoutes)
 
   router.use('/admin',
-    middleware.cors, middleware.session, middleware.jsonErrors, (ctx, next) => {
-      if (!ctx.session.admin) ctx.throw(403)
-      return next()
-    },
+    middleware.cors, middleware.session, middleware.jsonErrors, middleware.adminCheck,
     adminRouter.routes()
   )
   app.use(router.routes())

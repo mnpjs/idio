@@ -1,8 +1,9 @@
+import { Script } from '..'
+
 /**
  * @type {import('../..').Middleware}
  */
 export default (ctx) => {
-  const { STATIC } = ctx
   const title = '{{ name }}'
   const description = '{{ description }}'
   ctx.body = ctx.render(<div className="container">
@@ -19,19 +20,21 @@ export default (ctx) => {
       </div>
     </div>
     <hr/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.5.3/preact.umd.js" />
-    <script src={`${STATIC}/client.js`} />
-    <script dangerouslySetInnerHTML={{ __html: `(${init.toString()})()` }} />
   </div>, {
     title: '{{ name }}',
+    scripts: [
+      <Script ctx={ctx} src="client" />,
+      <script type={ctx.CLOSURE ? '' : 'module'} dangerouslySetInnerHTML={{ __html: `(${init.toString('${ctx.HOST}')})('${ctx.HOST}')` }} />,
+    ],
   })
 }
 
-const init = () => {
-  const api_key = '{{ safe-name }}'
+const init = (host) => {
+  const api_key = '{{ save-name }}'
   /* eslint-env browser */
-  window.Client({
+  window.Client.comments({
     api_key,
+    host,
     container: 'comments',
   })
 }

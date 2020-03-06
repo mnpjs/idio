@@ -1,7 +1,7 @@
 /** @type {import('../../').Middleware} */
 export default (ctx) => {
   const { linkedin_user, github_user, csrf } = ctx.session
-  ctx.body = /** @type {Auth} */ ({
+  ctx.body = /** @type {IDIO_NAMESPACE.Auth} */ ({
     linkedin_user,
     github_user: github_user ? {
       login: github_user.login,
@@ -14,5 +14,7 @@ export default (ctx) => {
 }
 
 /**
- * @typedef {import('../../').Auth} Auth
+ * @typedef {import('../../').Auth} IDIO_NAMESPACE.Auth
  */
+
+export const middleware = ['session']

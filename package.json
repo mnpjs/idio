@@ -36,7 +36,7 @@
   "bugs": {
     "url": "{{ repo.html_url }}/issues"
   },
-  "homepage": "{{ frontend }}",
+  "homepage": "https://{{ frontend }}",
   "dependencies": {
     "@depack/form": "^1.4.2",
     "@elastic/elasticsearch": "^7.6.0",

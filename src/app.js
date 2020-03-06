@@ -5,9 +5,11 @@ import { connectMongo } from './lib'
 import Server from './server'
 
 const {
-  ELASTIC: elastic, MONGO_URL,
+  ELASTIC: elastic, MONGO_URL, NODE_ENV,
   PUBLIC_VAPID: public_vapid, PRIVATE_VAPID: private_vapid,
 } = process.env
+
+const PROD = NODE_ENV == 'production'
 
 if (!elastic) throw new Error('Expecting ELASTIC env variable')
 if (!MONGO_URL) throw new Error('Expecting MONGO_URL env variable')
@@ -25,7 +27,7 @@ webpush.setVapidDetails('https://{{ name }}', public_vapid, private_vapid)
     const [Mongo] = await Promise.all([
       connectMongo(MONGO_URL),
       client.ping().then(() => {
-        console.log('Connected to %s', c(elastic, 'red'))
+        console.log('Pinged ElasticSearch at %s', c(elastic, 'red'))
       }),
     ])
     const { url } = await Server({
@@ -35,7 +37,7 @@ webpush.setVapidDetails('https://{{ name }}', public_vapid, private_vapid)
       github_id: process.env.GITHUB_ID,
       github_secret: process.env.GITHUB_SECRET,
       elastic, Mongo,
-      appName: '{{ name }}',
+      appName: PROD ? '{{ name }}' : 'dev.{{ name }}',
     })
     console.log('Started on %s', c(url, 'green'))
   } catch ({ stack }) {
